@@ -1,0 +1,112 @@
+import React from 'react';
+import styled from 'styled-components';
+
+const HeaderBlock = styled.header`
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 102px;
+    background: #fff;
+    border-bottom: 1px solid #dbccbe;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+`;
+
+const HeaderBox = styled.div`
+    position: relative;
+    width: 1220px;
+    margin: 0 auto;
+    text-align: center;
+`;
+
+const Logo = styled.h1`
+    display: inline-block;
+    margin-top: 7px;
+    line-height: 0;
+`;
+
+const LogoBox = styled.a`
+    display: inline-block;
+`;
+
+const LogoImgButton = styled.button`
+    position: absolute;
+    top: 25px;
+    left: 0px;
+    z-index: 300;
+    border: 0;
+    background: none;
+`;
+
+const LogoImgBox = styled.img`
+    display: inline-block;
+    width: 57px;
+    height: 43px;
+`;
+
+const LogoTextImgBox = styled.img`
+    display: inline-block;
+    width: 245px;
+    height: 83px;
+`;
+
+const LogoTextBox = styled.span`
+    overflow: hidden !important;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+    clip: rect(0, 0, 0, 0) !important;
+    -webkit-clip-path: inset(0 0 99.9% 99.9%) !important;
+    clip-path: inset(0 0 99.9% 99.9%) !important;
+`;
+
+const Utils = styled.div`
+    position: absolute;
+    top: 35px;
+    right: 0;
+`;
+
+const UtilsListBox = styled.ul`
+    list-style: none;
+`;
+
+const UtilsText = styled.a`
+    font-size : 14px;
+    text-decoration: none;
+    color : #8b7365;
+    &:hover{  
+        color : #660000;
+        box-shadow: 0 2px 1px #decdb9;        
+    }
+`;
+
+function Header() {
+  return (
+    <HeaderBlock>
+        <HeaderBox>
+            <Logo>
+                <LogoBox>
+                    <LogoTextImgBox src='logos/logo_img.PNG'></LogoTextImgBox>
+                    <LogoTextBox>"Mr. Dinner"</LogoTextBox>
+                </LogoBox>
+                <LogoImgButton>
+                    <LogoImgBox src='logos/logo.PNG'></LogoImgBox>
+                </LogoImgButton>
+            </Logo>
+            <Utils>
+                <UtilsListBox>
+                    <li><UtilsText href='./'>로그인</UtilsText></li>
+                </UtilsListBox>
+            </Utils>
+        </HeaderBox>
+    </HeaderBlock>
+  );
+}
+
+export default Header;

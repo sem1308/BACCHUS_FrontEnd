@@ -28,6 +28,16 @@
   color: #61dafb;
 }
 
+.nav-link {
+  text-decoration: none;
+  color : #8b7365;
+}
+
+.nav-link:hover{
+  color : #660000;
+  box-shadow: 0 2px 1px #decdb9;        
+}
+
 ul {
   list-style: none;
 }

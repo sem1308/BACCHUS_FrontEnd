@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import axios from 'axios';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const CardImgBox = styled.img`
   height:250px;
@@ -51,18 +52,20 @@ function DinnerList() {
   return (
     <Row xs={4} md={4} className="g-4">
       {dinners.map(dinner => (
-        <Col>
+        <Col key={dinner.dinnerNum}>
             <Card>
-              <CardImgBox alt="" variant='top' className="card-img" src={`imgs/${dinner.name}.jpeg`}></CardImgBox>
-                <Card.Body>
-                    <Card.Title>{dinner.name}</Card.Title>
-                    <CardTextBox>
-                        {dinner.extraContent}
-                    </CardTextBox>
-                </Card.Body>
-                <Card.Footer>
-                    <small className="text-muted">적정 인원 : {dinner.numPeople}</small>   
-                </Card.Footer>
+              <Link to={`/dinner/${dinner.dinnerNum}`}>
+                <CardImgBox alt="" variant='top' className="card-img" src={`/imgs/${dinner.name}.jpeg`}></CardImgBox>
+              </Link>
+              <Card.Body>
+                  <Card.Title>{dinner.name}</Card.Title>
+                  <CardTextBox>
+                      {dinner.extraContent}
+                  </CardTextBox>
+              </Card.Body>
+              <Card.Footer>
+                  <small className="text-muted">적정 인원 : {dinner.numPeople}</small>   
+              </Card.Footer>
             </Card> 
         </Col>
       ))}

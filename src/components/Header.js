@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const HeaderBlock = styled.header`
     position: fixed;
@@ -76,14 +77,9 @@ const UtilsListBox = styled.ul`
     list-style: none;
 `;
 
-const UtilsText = styled.a`
+const UtilsText = styled.li`
     font-size : 14px;
     text-decoration: none;
-    color : #8b7365;
-    &:hover{  
-        color : #660000;
-        box-shadow: 0 2px 1px #decdb9;        
-    }
 `;
 
 function Header() {
@@ -92,16 +88,18 @@ function Header() {
         <HeaderBox>
             <Logo>
                 <LogoBox>
-                    <LogoTextImgBox src='logos/logo_img.PNG'></LogoTextImgBox>
+                    <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
                     <LogoTextBox>"Mr. Dinner"</LogoTextBox>
                 </LogoBox>
                 <LogoImgButton>
-                    <LogoImgBox src='logos/logo.PNG'></LogoImgBox>
+                    <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
                 </LogoImgButton>
             </Logo>
             <Utils>
                 <UtilsListBox>
-                    <li><UtilsText href='./'>로그인</UtilsText></li>
+                    <UtilsText>
+                        <Link className='nav-link' to="/login">로그인</Link>
+                    </UtilsText>
                 </UtilsListBox>
             </Utils>
         </HeaderBox>

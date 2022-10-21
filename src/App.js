@@ -1,11 +1,16 @@
+import Login from './components/login';
 import './css/App.css';
-import Dinner from './pages/DinnerPage/Dinner'
+import { Route, Routes } from 'react-router-dom';
+import Dinner from './pages/Dinner';
+import DinnerDetail from './pages/DinnerDetail';
 
 function App() {
   return (
-    <div>
-      <Dinner></Dinner>
-    </div>
+    <Routes>
+      <Route path="/dinner" element={<Dinner />} />
+      <Route path="/dinner/:dinnerNum" element={<DinnerDetail />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
   );
 }
 

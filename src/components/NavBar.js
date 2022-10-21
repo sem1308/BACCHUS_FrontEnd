@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {Link} from 'react-router-dom';
 
 const NavBarBlock = styled.nav`
     display: block;
@@ -12,7 +13,7 @@ const NavBarBlock = styled.nav`
 `;
 
 const NavBarListBox = styled.ul`
-    display: inline-block;
+    display: inline;
     vertical-align: top;
     padding : 0px;
     margin : 0px;
@@ -22,8 +23,7 @@ const NavBarContent = styled.li`
     float: left;
 `;
 
-const NavBarContentLink = styled.a`
-    text-decoration: none;
+const NavBarContentLink = styled.span`
     border-bottom-color: #fff;
     display: block;
     width: 130px;
@@ -33,26 +33,28 @@ const NavBarContentLink = styled.a`
     font-size: 15px;
     line-height: 48px;
     text-align: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -webkit-transition: background .4s ease;
-    transition: background .4s ease;
 
     &:hover{  
         color : #660000;     
     }
 `;
 
-function NavBar () {
+function NavBar ({name}) {
     return (
         <NavBarBlock>
             <NavBarListBox>
                 <NavBarContent>
-                    <NavBarContentLink>메뉴</NavBarContentLink>
+                    <NavBarContentLink>
+                        <Link className='nav-link' to='/dinner'>{name}</Link>
+                    </NavBarContentLink>
                 </NavBarContent>
             </NavBarListBox>
         </NavBarBlock>
     )
 }
+
+NavBar.defaultProps = {
+    name: '메뉴'
+  }
 
 export default NavBar;

@@ -1,7 +1,7 @@
-import DinnerList from '../../components/DinnerList';
-import Header from '../../components/Header';
+import DinnerList from '../components/DinnerList';
+import Header from '../components/Header';
 import styled from 'styled-components';
-import NavBar from '../../components/NavBar';
+import NavBar from '../components/NavBar';
 
 const DinnerBlock = styled.div`
     position: relative;

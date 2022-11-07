@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import {backEndUrl} from '../configs';
  
-function Login() {
+function Login({type}) {
     const [inputId, setInputId] = useState('')
     const [inputPw, setInputPw] = useState('')
  
@@ -18,7 +19,7 @@ function Login() {
     const onClickLogin = () => {
         console.log(inputId)
         console.log(inputPw)
-        axios.post('http://13.125.101.4:8080/member',{
+        axios.post(backEndUrl+'/'+type+'/login',{
             "id": inputId,
             "pw": inputPw
         })

@@ -21,6 +21,10 @@ const NavBarListBox = styled.ul`
 
 const NavBarContent = styled.li`
     float: left;
+    border: 1px solid #decdb9;
+    &:first-child{  
+        border-right:none;
+    }
 `;
 
 const NavBarContentLink = styled.span`
@@ -28,7 +32,6 @@ const NavBarContentLink = styled.span`
     display: block;
     width: 130px;
     height: 50px;
-    border: 1px solid #decdb9;
     color: #4f382a;
     font-size: 15px;
     line-height: 48px;
@@ -39,22 +42,31 @@ const NavBarContentLink = styled.span`
     }
 `;
 
-function NavBar ({name}) {
+function NavBar ({links}) {
     return (
         <NavBarBlock>
             <NavBarListBox>
-                <NavBarContent>
-                    <NavBarContentLink>
-                        <Link className='nav-link' to='/dinner'>{name}</Link>
-                    </NavBarContentLink>
-                </NavBarContent>
+                {
+                    links.map(link=>
+                        <NavBarContent key={link.name}>
+                            <NavBarContentLink>
+                                <Link className='nav-link' to={link.to}>{link.name}</Link>
+                            </NavBarContentLink>
+                        </NavBarContent>
+                    )
+                }
             </NavBarListBox>
         </NavBarBlock>
     )
 }
 
 NavBar.defaultProps = {
-    name: '메뉴'
+    links: [
+        {
+            'name':'메뉴',
+            'to' : '/dinner'
+        }
+    ]
   }
 
 export default NavBar;

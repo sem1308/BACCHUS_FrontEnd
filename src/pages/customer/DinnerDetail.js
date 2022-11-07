@@ -1,9 +1,10 @@
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import styled from 'styled-components';
-import NavBar from '../components/NavBar';
+import NavBar from '../../components/NavBar';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import {backEndUrl} from '../../configs';
 
 const DinnerBlock = styled.div`
     position: relative;
@@ -40,15 +41,17 @@ const DetailTextBlock = styled.div`
     padding: 0px;
 `;
 
-const DetailTextBox = styled.div`
+const DetailTextBox = styled.pre`
     width: 500px;
     border-bottom: 1px solid ${props => props.color || '#fff'};
     margin-top : ${props => props.mt || '0px'};
     margin-left : ${props => props.ml || '0px'};
+    margin-bottom : 0px;
     color: #4f382a;
+    font-family: var(--bs-body-font-family);
     font-size: ${props => props.fs || '24px'};
     font-weight: ${props => props.fw || '400'};
-    line-height: 48px; 
+    line-height: ${props => props.lh || '48px'}; 
     text-align: start;
 `;
 
@@ -74,7 +77,8 @@ function DinnerDetail () {
             // loading 상태를 true 로 바꿉니다.
             setLoading(true);
             const response = await axios.get(
-              'http://13.125.101.4:8080/dinner/'+dinnerNum
+              //'http://13.125.101.4:8080/dinner/'+dinnerNum
+              backEndUrl+'/dinner/'+dinnerNum
             )
             setDinner(response.data); // 데이터는 response.data 안에 들어있습니다.
             response.data.foodCounts.map(foodCount=>setBasePrice(basePrice=>basePrice+foodCount.food.price*foodCount.count));
@@ -85,7 +89,7 @@ function DinnerDetail () {
           setLoading(false);
         };
         fetchUsers();
-    }, []);
+    }, [dinnerNum]);
 
     if (loading) return <div>로딩중..</div>;
     if (error) return <div>에러가 발생했습니다</div>;
@@ -98,14 +102,15 @@ function DinnerDetail () {
                 <NavBar></NavBar>
                 <DinnerDetailBlock>
                     <DinnerDetailBox>
-                        <ImgBox src={`/imgs/${dinner.name}.jpeg`}></ImgBox>
+                        <ImgBox src={`/imgs/dinners/${dinner.name}.jpeg`}></ImgBox>
                         <DetailTextBlock>
                             <DetailTextBox color='#decdb9'>{dinner.name}</DetailTextBox>
-                            <DetailTextBox mt='10px' fs='16px'>{dinner.extraContent}</DetailTextBox>
-                            <DetailTextBox mt='20px' fs='20px' fw='600'>기본 구성</DetailTextBox>
+                            <DetailTextBox lh='24px' mt='10px' fs='16px'>{dinner.extraContent}</DetailTextBox>
+                            <DetailTextBox fs='20px' fw='600'>기본 구성</DetailTextBox>
                             {dinner.foodCounts.map(foodCount=>{
                                 const food = foodCount.food;
                                 const count = foodCount.count;
+                                if(count === 0) return '';
                                 return(
                                     <FoodBox key={food.foodNum} ls='inside'>
                                         {food.name} {count}개

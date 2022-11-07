@@ -82,7 +82,7 @@ const UtilsText = styled.li`
     text-decoration: none;
 `;
 
-function Header() {
+function Header({type}) {
   return (
     <HeaderBlock>
         <HeaderBox>
@@ -98,13 +98,17 @@ function Header() {
             <Utils>
                 <UtilsListBox>
                     <UtilsText>
-                        <Link className='nav-link' to="/login">로그인</Link>
+                        <Link className='nav-link' to={"/login/"+type}>로그인</Link>
                     </UtilsText>
                 </UtilsListBox>
             </Utils>
         </HeaderBox>
     </HeaderBlock>
   );
+}
+
+Header.defaultProps = {
+    type: ''
 }
 
 export default Header;

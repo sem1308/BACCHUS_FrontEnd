@@ -26,11 +26,14 @@ function Login({ type }) {
             "pw": inputPw
         })
             .then((res) => {
-                // console.log(res);
+                console.log(res);
+                // 주문내역 페이지로의 이동여부 결정
                 if (res.status === 200) {
-                    // console.log(res.data.customerNum);
-                    window.confirm("주문 정보를 보시겠습니까?");
-                    navigation(`/History`);
+                    if (window.confirm("주문 정보를 보시겠습니까?")) {
+                        navigation(`/history/${res.data.customerNum}`);
+                    } else {
+                        navigation(`/dinner`)
+                    }
                 } else {
                     console.log("없는 정보입니다.");
                 }

@@ -78,23 +78,25 @@ const UtilsListBox = styled.ul`
 `;
 
 const UtilsText = styled.li`
-    font-size : 14px;
     text-decoration: none;
+    border-radius: 10%;
 `;
 
 function Header({ type }) {
     return (
         <HeaderBlock>
             <HeaderBox>
-                <Logo>
-                    <LogoBox>
-                        <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
-                        <LogoTextBox>"Mr. Dinner"</LogoTextBox>
-                    </LogoBox>
-                    <LogoImgButton>
-                        <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
-                    </LogoImgButton>
-                </Logo>
+                <Link to="/dinner">
+                    <Logo>
+                        <LogoBox>
+                            <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
+                            <LogoTextBox>"Mr. Dinner"</LogoTextBox>
+                        </LogoBox>
+                        <LogoImgButton>
+                            <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
+                        </LogoImgButton>
+                    </Logo>
+                </Link>
                 <Utils>
                     <UtilsListBox>
                         <UtilsText>

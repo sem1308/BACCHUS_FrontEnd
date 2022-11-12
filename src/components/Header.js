@@ -82,29 +82,29 @@ const UtilsText = styled.li`
     text-decoration: none;
 `;
 
-function Header({type}) {
-  return (
-    <HeaderBlock>
-        <HeaderBox>
-            <Logo>
-                <LogoBox>
-                    <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
-                    <LogoTextBox>"Mr. Dinner"</LogoTextBox>
-                </LogoBox>
-                <LogoImgButton>
-                    <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
-                </LogoImgButton>
-            </Logo>
-            <Utils>
-                <UtilsListBox>
-                    <UtilsText>
-                        <Link className='nav-link' to={"/login/"+type}>로그인</Link>
-                    </UtilsText>
-                </UtilsListBox>
-            </Utils>
-        </HeaderBox>
-    </HeaderBlock>
-  );
+function Header({ type }) {
+    return (
+        <HeaderBlock>
+            <HeaderBox>
+                <Logo>
+                    <LogoBox>
+                        <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
+                        <LogoTextBox>"Mr. Dinner"</LogoTextBox>
+                    </LogoBox>
+                    <LogoImgButton>
+                        <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
+                    </LogoImgButton>
+                </Logo>
+                <Utils>
+                    <UtilsListBox>
+                        <UtilsText>
+                            <Link className='nav-link' to={"/login/" + type}>로그인</Link>
+                        </UtilsText>
+                    </UtilsListBox>
+                </Utils>
+            </HeaderBox>
+        </HeaderBlock>
+    );
 }
 
 Header.defaultProps = {

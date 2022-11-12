@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { backEndUrl } from '../configs';
+import { useNavigate } from 'react-router-dom';
 
 function Login({ type }) {
     const [inputId, setInputId] = useState('')
     const [inputPw, setInputPw] = useState('')
+    const navigation = useNavigate();
 
     // input data 의 변화가 있을 때마다 value 값을 변경해서 useState 해준다
     const handleInputId = (e) => {
@@ -23,11 +25,18 @@ function Login({ type }) {
             "id": inputId,
             "pw": inputPw
         })
-            .then(res => console.log(res))
+            .then((res) => {
+                // console.log(res);
+                if (res.status === 200) {
+                    // console.log(res.data.customerNum);
+                    window.confirm("주문 정보를 보시겠습니까?");
+                    navigation(`/History`);
+                } else {
+                    console.log("없는 정보입니다.");
+                }
+            })
             .catch()
     }
-
-    console.log(type);
 
     return (
         <div>

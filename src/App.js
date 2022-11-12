@@ -1,21 +1,21 @@
 import Login from './components/login';
 import './css/App.css';
 import { Route, Routes } from 'react-router-dom';
-import Dinner from './pages/customer/Dinner';
-import DinnerDetail from './pages/customer/DinnerDetail';
-import EmployeeHome from './pages/employee/EmpHome';
-import EmpManage from './pages/employee/EmpManage';
+import DinnerPage from './pages/customer/DinnerPage';
+import DinnerDetailPage from './pages/customer/DinnerDetailPage';
+import EmpHomePage from './pages/employee/EmpHomePage';
+import EmpManagePage from './pages/employee/EmpManagePage';
 
 function App() {
   return (
     <Routes>
-      <Route path="/dinner" element={<Dinner />} />
-      <Route path="/dinner/:dinnerNum" element={<DinnerDetail />} />
+      <Route path="/dinner" element={<DinnerPage />} />
+      <Route path="/dinner/:dinnerNum" element={<DinnerDetailPage />} />
       <Route path="/login/" element={<Login type='customer'/>} />
       <Route path="/login/employee" element={<Login type='employee'/>} />
-      <Route path="/employee" element={<EmployeeHome/>} />
-      <Route path="/food/employee" element={<EmpManage which='food'/>} />
-      <Route path="/dinner/employee" element={<EmpManage which='dinner'/>} />
+      <Route path="/employee" element={<EmpHomePage/>} />
+      <Route path="/food/employee" element={<EmpManagePage which='food'/>} />
+      <Route path="/dinner/employee" element={<EmpManagePage which='dinner'/>} />
     </Routes>
   );
 }

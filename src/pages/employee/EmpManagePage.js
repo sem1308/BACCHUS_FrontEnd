@@ -1,20 +1,10 @@
-import DinnerList from '../../components/DinnerList';
-import FoodList from '../../components/employee/FoodList';
+import DinnerList from '../../components/dinner/DinnerList';
+import FoodList from '../../components/food/FoodList';
 import Header from '../../components/Header';
-import styled from 'styled-components';
 import NavBar from '../../components/NavBar';
+import { DinnerBlock } from '../../components/Utils';
 
-const DinnerBlock = styled.div`
-    position: relative;
-    width: 1220px;
-    padding-top: 130px;
-    margin: 55px auto 0;
-    display: flex;
-    flex-direction: column;
-    align-content: space-between;
-`;
-
-function EmpManage ({which}) {
+function EmpManagePage ({which}) {
     const links = [
         {
             'name':'음식',
@@ -41,8 +31,8 @@ function EmpManage ({which}) {
     )
 }
 
-EmpManage.defaultProps = {
+EmpManagePage.defaultProps = {
     which: 'food'
 }
 
-export default EmpManage;
+export default EmpManagePage;

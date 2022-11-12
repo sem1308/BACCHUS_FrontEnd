@@ -13,6 +13,11 @@
   }
 }
 
+.ant-picker-dropdown {
+  z-index: 1600 !important; /* has to be larger than 1050 */
+  position : absolute;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -28,14 +33,9 @@
   color: #61dafb;
 }
 
-.nav-link {
-  text-decoration: none;
-  color : #8b7365;
-}
-
-.nav-link:hover{
-  color : #660000;
-  box-shadow: 0 2px 1px #decdb9;        
+.nav .nav-link {
+  --bs-nav-link-color:black;
+  --bs-nav-link-hover-color:black;
 }
 
 .link {

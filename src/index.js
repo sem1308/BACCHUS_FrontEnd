@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './css/index.css';
+import 'antd/dist/antd.css';
+import 'sweetalert2/src/sweetalert2.scss'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';

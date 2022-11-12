@@ -5,70 +5,12 @@ import Card from 'react-bootstrap/Card';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import Modal from './Modal';
-import { foodType, backEndUrl } from '../configs';
+import Modal from '../Modal';
+import { backEndUrl } from '../../configs';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
-const CardImgBox = styled.img`
-  height:250px;
-  max-width: 300px;
-`;
-
-const CardTextBox = styled.pre`
-  padding-top : 2px;
-  font: caption;
-  font-size : 13px;
-  min-height: 50px;
-`;
-
-const ModalBlock = styled.div`
-  padding : 20px;
-  position: relative;
-  margin: 0 auto;
-  display: flex;
-  height : 700px;
-  flex-direction : column;
-  overflow: auto;
-`
-
-const ContentBlock = styled.div`
-  display : ${props => props.display || 'block'};
-  flex-direction : ${props => props.flex_direction || 'row'};
-  margin: ${props => props.margin || '0'};
-  width: ${props => props.width || 'auto'};
-  align-items : center;
-  font-size : ${props => props.fs || 'auto'};
-`
-
-const ButtonBlock = styled.div`
-  display : flex;
-  width: ${props => props.width || 'auto'};
-  justify-content : right;
-`
-
-const Btn = styled.button`
-  border-radius : ${props => props.radius || '20%'};
-  padding : 10px;
-  margin: ${props => props.margin || '5px'};
-  color : white;
-  border : 0;
-  outline:0;
-  background-color : ${props => props.bg_color || 'rgba(184,134,11,0.7)'};
-
-  &:hover{
-    background-color : ${props => props.bg_color_hover || 'rgba(184,134,11,1)'};
-  }
-`
-
-const ImgBlock = styled.div`
-  width : 100%;
-  display: flex;
-  flex-direction : column;
-  justify-items : center;
-  align-items : center;
-
-`
+import { CardImgBox, CardTextBox, ModalBlock, ContentBlock, ButtonBlock, Btn, Img} from '../Utils';
+import FoodNavBar from '../FoodNavBar';
 
 const FoodImgUploadLabel = styled.label`
   width:140px;
@@ -101,13 +43,6 @@ const FoodImgUploadButton = styled.input`
   border: 0;
 `
 
-const Img = styled.img`
-  height: ${props => props.height || '300px'};
-  max-width: 100%;
-  margin : auto;
-  margin-bottom : 30px;
-`
-
 const DinnerInit = {
   "name": "",
   "extraContent": "",
@@ -122,16 +57,22 @@ function DinnerList({IsEmployee}) {
   const [foods, setFoods] = useState([]);
   const [isExist, setIsExist] = useState(false);
   const [foodCounts, setFoodCounts] = useState([]);
+  const [foodCountsType, setFoodCountsType] = useState();
   const [dinner, setDinner] = useState(DinnerInit);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState('/imgs/dinner.png');
 
   const handleFoodCountChange = (e) => {
-    console.log(e.target)
+    let value;
+    try{
+      value = Number(e.target.value);
+    }catch(e){
+      value = 0;
+    }
     setFoodCounts(
       foodCounts.map(foodCount =>
-        foodCount.foodNum === Number(e.target.id) ? { ...foodCount, [e.target.name] : e.target.value } : foodCount
+        foodCount.foodNum === Number(e.target.id) ? { ...foodCount, [e.target.name] : value } : foodCount
       )
     );
   }
@@ -173,6 +114,7 @@ function DinnerList({IsEmployee}) {
     setModalOpen(false);
     setImageSrc('');
   };
+  
   const handleChange = e => {
     setDinner({
       ...dinner,
@@ -244,7 +186,8 @@ function DinnerList({IsEmployee}) {
             {
               foodDinnerCountNum : -1,
               foodNum : food.foodNum,
-              count : 0
+              count : 0,
+              type : food.type
             }))
         )   
       });
@@ -302,8 +245,8 @@ function DinnerList({IsEmployee}) {
         <>
           <ButtonBlock><Btn margin='15px 5px' radius='10%' bg_color='rgba(139,69,19,0.7)' bg_color_hover='rgba(139,69,19,1)' onClick={()=>openModal()}>디너 추가</Btn></ButtonBlock>
           <Modal open={modalOpen} close={closeModal} header={isExist ? "디너 수정" : "디너 추가"}>
-            <ModalBlock>
-              <ImgBlock>
+            <ModalBlock height='700px' flex_direction='column' overflow='auto'>
+              <ContentBlock display='flex' flex_direction='column'>
                 {<Img src={imageSrc} alt="preview-img" />}
                 <FoodImgUploadLabel for="ex_file">이미지 업로드</FoodImgUploadLabel>
                 <FoodImgUploadButton type='file' 
@@ -314,7 +257,7 @@ function DinnerList({IsEmployee}) {
                     encodeFileToBase64(e.target.files[0]);
                   }}>
                 </FoodImgUploadButton>
-              </ImgBlock>
+              </ContentBlock>
               <ContentBlock>
                 <Form.Group className="mb-3" controlId="formBasicName">
                   <Form.Label>이름</Form.Label>
@@ -332,9 +275,11 @@ function DinnerList({IsEmployee}) {
     
                 <Form.Group className="mb-3">
                   <Form.Label className="mb-3">음식</Form.Label>
+                  <FoodNavBar setFoodCountsType={setFoodCountsType}></FoodNavBar>
                   {foodCounts.map(foodCount=>{
+                    if(foodCount.type !== foodCountsType) return;
                     const findIndex = foods.findIndex(element => element.foodNum === Number(foodCount.foodNum));
-                    if(findIndex == -1) {
+                    if(findIndex === -1) {
                       setError('음식 데이터를 찾을 수 없습니다.')
                     }                    
                     return(
@@ -345,10 +290,7 @@ function DinnerList({IsEmployee}) {
                         </ContentBlock>
                       </ContentBlock>
                     )
-                  }
-
-                  )}
-                  
+                  })}
                 </Form.Group>
                 <ButtonBlock>
                   <Button className="mt-5" variant="primary" type="submit" onClick={submitHandler}>

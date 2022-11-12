@@ -29,7 +29,7 @@ const LinkBlock = styled.div`
     }
 `;
 
-function EmpHome () {
+function EmpHomePage () {
     return (
         <div>
             <Header type='employee'></Header>
@@ -45,4 +45,4 @@ function EmpHome () {
     )
 }
 
-export default EmpHome;
+export default EmpHomePage;

@@ -22,8 +22,8 @@ const NavBarListBox = styled.ul`
 const NavBarContent = styled.li`
     float: left;
     border: 1px solid #decdb9;
-    &:first-child{  
-        border-right:none;
+    &:last-child{  
+        border-left:none;
     }
 `;
 
@@ -39,6 +39,7 @@ const NavBarContentLink = styled.span`
 
     &:hover{  
         color : #660000;     
+        box-shadow : 0 2px 1px 0 #decdb9;
     }
 `;
 

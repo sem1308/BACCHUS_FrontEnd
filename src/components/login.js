@@ -19,14 +19,12 @@ function Login({ type }) {
 
     // login 버튼 클릭 이벤트
     const onClickLogin = () => {
-        console.log(inputId)
-        console.log(inputPw)
         axios.post(backEndUrl + '/' + type + '/login', {
             "id": inputId,
             "pw": inputPw
         })
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 // 주문내역 페이지로의 이동여부 결정
                 if (res.status === 200) {
                     if (window.confirm("주문 정보를 보시겠습니까?")) {

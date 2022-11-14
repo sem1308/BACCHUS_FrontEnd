@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -82,7 +82,11 @@ const UtilsText = styled.li`
     border-radius: 10%;
 `;
 
-function Header({ type }) {
+function Header({ type, auth }) {
+    console.log("RENDERING...");
+    const [au, setAuth] = useState(true);
+    console.log(au);
+
     return (
         <HeaderBlock>
             <HeaderBox>
@@ -100,7 +104,11 @@ function Header({ type }) {
                 <Utils>
                     <UtilsListBox>
                         <UtilsText>
-                            <Link className='nav-link' to={"/login/" + type}>로그인</Link>
+                            {
+                                !au ?
+                                    <Link className='nav-link' to={"/login/" + type} element={<Header auth={true} />}>로그인</Link>
+                                    : <button onClick={() => { setAuth(!au) }}>로그아웃</button>
+                            }
                         </UtilsText>
                     </UtilsListBox>
                 </Utils>

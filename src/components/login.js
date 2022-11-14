@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { backEndUrl } from '../configs';
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
 
 function Login({ type }) {
     const [inputId, setInputId] = useState('')
@@ -18,8 +19,8 @@ function Login({ type }) {
     }
 
     // login 버튼 클릭 이벤트
-    const onClickLogin = () => {
-        axios.post(backEndUrl + '/' + type + '/login', {
+    const onClickLogin = async () => {
+        await axios.post(backEndUrl + '/' + type + '/login', {
             "id": inputId,
             "pw": inputPw
         })
@@ -27,6 +28,7 @@ function Login({ type }) {
                 // console.log(res);
                 // 주문내역 페이지로의 이동여부 결정
                 if (res.status === 200) {
+                    <Header auth={true} />
                     if (window.confirm("주문 정보를 보시겠습니까?")) {
                         navigation(`/history/${res.data.customerNum}`);
                     } else {
@@ -36,7 +38,9 @@ function Login({ type }) {
                     console.log("없는 정보입니다.");
                 }
             })
-            .catch()
+            .catch((error) => {
+                alert("Error");
+            })
     }
 
     return (

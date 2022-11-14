@@ -3,6 +3,8 @@ import axios from 'axios';
 import { backEndUrl } from '../configs';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
+import { Link } from 'react-router-dom';
+import Register from './Register';
 
 function Login({ type }) {
     const [inputId, setInputId] = useState('')
@@ -25,7 +27,7 @@ function Login({ type }) {
             "pw": inputPw
         })
             .then((res) => {
-                // console.log(res);
+                console.log(res);
                 // 주문내역 페이지로의 이동여부 결정
                 if (res.status === 200) {
                     <Header auth={true} />
@@ -35,6 +37,7 @@ function Login({ type }) {
                         navigation(`/dinner`)
                     }
                 } else {
+                    <Header auth={false} />
                     console.log("없는 정보입니다.");
                 }
             })
@@ -56,6 +59,9 @@ function Login({ type }) {
             </div>
             <div>
                 <button type='button' onClick={onClickLogin}>Login</button>
+                <Link to={`/login/register`} element={<Register />}>
+                    <button type='button' onClick={() => { alert('회원가입 페이지로 이동하겠습니다.') }}>Signin</button>
+                </Link>
             </div>
         </div>
     )

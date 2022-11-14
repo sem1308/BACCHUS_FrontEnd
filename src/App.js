@@ -6,7 +6,7 @@ import DinnerPage from './pages/customer/DinnerPage';
 import DinnerDetailPage from './pages/customer/DinnerDetailPage';
 import EmpHomePage from './pages/employee/EmpHomePage';
 import EmpManagePage from './pages/employee/EmpManagePage';
-import Register from './components/Register';
+import Register from './components/register';
 
 function App() {
   return (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const HeaderBlock = styled.header`
     position: fixed;
@@ -82,10 +83,8 @@ const UtilsText = styled.li`
     border-radius: 10%;
 `;
 
-function Header({ type, auth }) {
-    console.log("RENDERING...");
-    const [au, setAuth] = useState(true);
-    console.log(au);
+function Header({ type }) {
+    const [cookies, setCookie, removeCookie] = useCookies(['customerNum']);
 
     return (
         <HeaderBlock>
@@ -105,9 +104,13 @@ function Header({ type, auth }) {
                     <UtilsListBox>
                         <UtilsText>
                             {
-                                !au ?
-                                    <Link className='nav-link' to={"/login/" + type} element={<Header auth={true} />}>로그인 / 회원가입</Link>
-                                    : <button onClick={() => { setAuth(!au) }}>로그아웃</button>
+                                cookies === undefined ?
+                                    <Link className='nav-link' to={"/login/" + type}>로그인 / 회원가입</Link>
+                                    : <button onClick={() => {
+                                        console.log(cookies);
+                                        removeCookie('customerNum');
+                                        console.log(cookies);
+                                    }}>로그아웃</button>
                             }
                         </UtilsText>
                     </UtilsListBox>

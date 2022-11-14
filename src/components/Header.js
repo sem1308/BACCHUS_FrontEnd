@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -78,33 +78,43 @@ const UtilsListBox = styled.ul`
 `;
 
 const UtilsText = styled.li`
-    font-size : 14px;
     text-decoration: none;
+    border-radius: 10%;
 `;
 
-function Header({type}) {
-  return (
-    <HeaderBlock>
-        <HeaderBox>
-            <Logo>
-                <LogoBox>
-                    <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
-                    <LogoTextBox>"Mr. Dinner"</LogoTextBox>
-                </LogoBox>
-                <LogoImgButton>
-                    <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
-                </LogoImgButton>
-            </Logo>
-            <Utils>
-                <UtilsListBox>
-                    <UtilsText>
-                        <Link className='nav-link' to={"/login/"+type}>로그인</Link>
-                    </UtilsText>
-                </UtilsListBox>
-            </Utils>
-        </HeaderBox>
-    </HeaderBlock>
-  );
+function Header({ type, auth }) {
+    console.log("RENDERING...");
+    const [au, setAuth] = useState(true);
+    console.log(au);
+
+    return (
+        <HeaderBlock>
+            <HeaderBox>
+                <Link to="/dinner">
+                    <Logo>
+                        <LogoBox>
+                            <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
+                            <LogoTextBox>"Mr. Dinner"</LogoTextBox>
+                        </LogoBox>
+                        <LogoImgButton>
+                            <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
+                        </LogoImgButton>
+                    </Logo>
+                </Link>
+                <Utils>
+                    <UtilsListBox>
+                        <UtilsText>
+                            {
+                                !au ?
+                                    <Link className='nav-link' to={"/login/" + type} element={<Header auth={true} />}>로그인</Link>
+                                    : <button onClick={() => { setAuth(!au) }}>로그아웃</button>
+                            }
+                        </UtilsText>
+                    </UtilsListBox>
+                </Utils>
+            </HeaderBox>
+        </HeaderBlock>
+    );
 }
 
 Header.defaultProps = {

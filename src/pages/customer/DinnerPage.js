@@ -3,7 +3,7 @@ import Header from '../../components/Header';
 import NavBar from '../../components/NavBar';
 import { DinnerBlock } from '../../components/Utils';
 
-function DinnerPage () {
+function DinnerPage() {
     return (
         <div>
             <Header></Header>

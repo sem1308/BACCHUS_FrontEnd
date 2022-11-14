@@ -85,11 +85,11 @@ function DinnerDetail ({dinnerNum}) {
               foodCountDTOs : foodCounts,
               insertOrderDTO : {
                 "dinnerNum" : [dinner.dinnerNum],
-                "customerNum" : 1,
+                "customerNum" : 3,
                 "totalPrice": totalPrice,
                 "styleCode": orderInfo.styleCode,
                 "wantedDeliveredTime" : orderInfo.wantedDeliveredTime,
-                "address" : orderInfo.address.join(''),
+                "address" : orderInfo.address.join(','),
                 "cardNum" : orderInfo.cardNum.join('')
               }
             }
@@ -103,11 +103,10 @@ function DinnerDetail ({dinnerNum}) {
               /* Read more about isConfirmed, isDenied below */
               if (res.isConfirmed) {
                 closeModal()
-              }
-              else{
+              }else{
               }
             })
-          ).error(res=>
+          ).catch(res=>
             Swal.fire({
               title: '주문 실패',
               text: res.data.text,
@@ -117,8 +116,7 @@ function DinnerDetail ({dinnerNum}) {
               /* Read more about isConfirmed, isDenied below */
               if (res.isConfirmed) {
                 closeModal()
-              }
-              else{
+              }else{
               }
             })
           );
@@ -135,19 +133,6 @@ function DinnerDetail ({dinnerNum}) {
         event.stopPropagation();
       }else{
         registOrder();
-        // Swal.fire({
-        //   title: '주문 완료',
-        //   text: '주문이 완료되었습니다.',
-        //   icon: 'success',
-        //   confirmButtonText: '확인'
-        // }).then((res) => {
-        //   /* Read more about isConfirmed, isDenied below */
-        //   if (res.isConfirmed) {
-        //     closeModal()
-        //   }
-        //   else{
-        //   }
-        // });
       }
       setValidated(true);
     };

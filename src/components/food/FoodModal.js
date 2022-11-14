@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {foodType} from '../../configs';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import {Img, ModalBlock, ContentBlock, ButtonBlock, Btn } from '../Utils';
+import {Img, ModalBlock, ContentBlock, ButtonBlock } from '../Utils';
 
 const ImgBlock = styled.div`
   width : 50%;

@@ -79,53 +79,42 @@ function DinnerDetail({ dinnerNum }) {
 
   const submitHandler = (event) => {
     const registOrder = async () => {
-      try {
-        // 요청이 시작 할 때에는 error 와 foods 를 초기화하고
-        setError(null);
-        await axios.post(
-          backEndUrl+'/order', {
-            foodCountDTOs : foodCounts,
-            insertOrderDTO : {
-              "dinnerNum" : [dinner.dinnerNum],
-              "customerNum" : 3,
-              "totalPrice": totalPrice,
-              "styleCode": orderInfo.styleCode,
-              "wantedDeliveredTime" : orderInfo.wantedDeliveredTime,
-              "address" : orderInfo.address.join(','),
-              "cardNum" : orderInfo.cardNum.join('')
-            }
+      // 요청이 시작 할 때에는 error 와 foods 를 초기화하고
+      setError(null);
+      await axios.post(
+        backEndUrl+'/order', {
+          foodCountDTOs : foodCounts,
+          insertOrderDTO : {
+            "dinnerNum" : [dinner.dinnerNum],
+            "customerNum" : 3,
+            "totalPrice": totalPrice,
+            "styleCode": orderInfo.styleCode,
+            "wantedDeliveredTime" : orderInfo.wantedDeliveredTime,
+            "address" : orderInfo.address.join(','),
+            "cardNum" : orderInfo.cardNum.join('')
           }
-        ).then(res=>
-          Swal.fire({
-            title: '주문 완료',
-            text: res.data.text,
-            icon: 'success',
-            confirmButtonText: '확인'
-          }).then((res) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (res.isConfirmed) {
-              closeModal()
-            }else{
-            }
-          })
-        ).catch(res=>
-          Swal.fire({
-            title: '주문 실패',
-            text: res.data.text,
-            icon: 'error',
-            confirmButtonText: '확인'
-          }).then((res) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (res.isConfirmed) {
-              closeModal()
-            }else{
-            }
-          })
-        );
-      } catch (e) {
-        console.log(e);
-        setError(e);
-      }
+        }
+      ).then(res=>
+        Swal.fire({
+          title: '주문 완료',
+          text: res.data.text,
+          icon: 'success',
+          confirmButtonText: '확인'
+        }).then((res) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (res.isConfirmed) {
+            closeModal()
+          }else{
+          }
+        })
+      ).catch(error=>
+        Swal.fire({
+          title: '주문 실패',
+          text: error.response.data.message,
+          icon: 'error',
+          confirmButtonText: '확인'
+        })
+      );
     };
 
     const form = event.currentTarget;

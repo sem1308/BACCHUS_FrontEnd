@@ -106,7 +106,7 @@ function Header({ type, auth }) {
                         <UtilsText>
                             {
                                 !au ?
-                                    <Link className='nav-link' to={"/login/" + type} element={<Header auth={true} />}>로그인</Link>
+                                    <Link className='nav-link' to={"/login/" + type} element={<Header auth={true} />}>로그인 / 회원가입</Link>
                                     : <button onClick={() => { setAuth(!au) }}>로그아웃</button>
                             }
                         </UtilsText>

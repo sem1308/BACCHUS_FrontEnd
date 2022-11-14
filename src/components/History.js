@@ -12,20 +12,27 @@ const History = () => {
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     // 재주문 버튼 클릭 시 이전 주문 정보 POST
     // 버튼 id를 주문 번호로 지정
     const submitHandler = (e) => {
         const registOrder = async () => {
+            console.log(typeof (e.target.id))
+            const index = user.orders.findIndex(element => element.orderNum === Number(e.target.id));
+            console.log(index);
             // 테스트
             const dto = {
-                foodCountDTOs: user.orders[e.target.id - 1].foodCounts,
+                foodCountDTOs: user.orders[index].foodCounts.map(fc => ({
+                    foodNum: fc.food.foodNum,
+                    count: fc.count
+                })),
                 insertOrderDTO: {
-                    "dinnerNum": user.orders[e.target.id - 1].dinners[0].dinnerNum,
+                    "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
                     "customerNum": user.customerNum,
-                    "totalPrice": user.orders[e.target.id - 1].totalPrice,
-                    "styleCode": user.orders[e.target.id - 1].style.styleCode,
-                    "wantedDeliveredTime": user.orders[e.target.id - 1].wantedDeliveredTime,
+                    "totalPrice": user.orders[index].totalPrice,
+                    "styleCode": user.orders[index].style.styleCode,
+                    "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
                     "address": user.address,
                     "cardNum": user.cardNum
                 }
@@ -34,54 +41,56 @@ const History = () => {
             console.log(dto);
 
             // 실제로 POST
-            // try {
-            //     // 요청이 시작 할 때에는 error 와 foods 를 초기화하고
-            //     setError(null);
-            //     await axios.post(
-            //         backEndUrl + '/order', {
-            //         foodCountDTOs: user.orders[e.target.id - 1].foodCounts,
-            //         insertOrderDTO: {
-            //             "dinnerNum": user.orders[e.target.id - 1].dinners[0].dinnerNum,
-            //             "customerNum": user.customerNum,
-            //             "totalPrice": user.orders[e.target.id - 1].totalPrice,
-            //             "styleCode": user.orders[e.target.id - 1].style.styleCode,
-            //             "wantedDeliveredTime": user.orders[e.target.id - 1].wantedDeliveredTime,
-            //             "address": user.address,
-            //             "cardNum": user.cardNum
-            //         }
-            //     }
-            //     ).then(res =>
-            //         Swal.fire({
-            //             title: '주문 완료',
-            //             text: res.data.text,
-            //             icon: 'success',
-            //             confirmButtonText: '확인'
-            //         }).then((res) => {
 
-            //             if (res.isConfirmed) {
-            //                 alert("주문이 완료됐습니다.")
-            //             }
-            //             else {
-            //             }
-            //         })
-            //     ).error(res =>
-            //         Swal.fire({
-            //             title: '주문 실패',
-            //             text: res.data.text,
-            //             icon: 'error',
-            //             confirmButtonText: '확인'
-            //         }).then((res) => {
-            //             if (res.isConfirmed) {
-            //                 alert("주문을 실패했습니다.")
-            //             }
-            //             else {
-            //             }
-            //         })
-            //     );
-            // } catch (e) {
-            //     console.log(e);
-            //     setError(e);
-            // }
+            try {
+                setError(null);
+                await axios.post(
+                    backEndUrl + '/order', {
+                    foodCountDTOs: user.orders[index].foodCounts.map(fc => ({
+                        foodNum: fc.food.foodNum,
+                        count: fc.count
+                    })),
+                    insertOrderDTO: {
+                        "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
+                        "customerNum": user.customerNum,
+                        "totalPrice": user.orders[index].totalPrice,
+                        "styleCode": user.orders[index].style.styleCode,
+                        "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
+                        "address": user.address,
+                        "cardNum": user.cardNum
+                    }
+                }
+                ).then(res =>
+                    Swal.fire({
+                        title: '주문 완료',
+                        text: res.data.text,
+                        icon: 'success',
+                        confirmButtonText: '확인'
+                    }).then((res) => {
+
+                        if (res.isConfirmed) {
+                            navigate(`/history/${num}`);
+                        }
+                        else {
+                        }
+                    })
+                ).catch(res =>
+                    Swal.fire({
+                        title: '주문 실패',
+                        text: res.data.text,
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    }).then((res) => {
+                        if (res.isConfirmed) {
+                            alert("주문을 실패했습니다.")
+                        }
+                        else {
+                        }
+                    })
+                );
+            } catch (e) {
+                setError(e);
+            }
         };
         if (window.confirm("이전과 동일하게 주문하시겠습니까?")) {
             registOrder();
@@ -105,6 +114,7 @@ const History = () => {
                 setUser(response.data);
                 setOrders(response.data.orders.reverse());
             } catch (e) {
+                console.log('asdsaawdwd');
                 setError(e);
             }
             setLoading(false);

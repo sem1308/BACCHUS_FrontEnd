@@ -6,6 +6,7 @@ import DinnerPage from './pages/customer/DinnerPage';
 import DinnerDetailPage from './pages/customer/DinnerDetailPage';
 import EmpHomePage from './pages/employee/EmpHomePage';
 import EmpManagePage from './pages/employee/EmpManagePage';
+import Register from './components/register';
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
       <Route path="/employee" element={<EmpHomePage />} />
       <Route path="/food/employee" element={<EmpManagePage which='food' />} />
       <Route path="/dinner/employee" element={<EmpManagePage which='dinner' />} />
+
+
+      <Route path="/login/register" element={<Register />} />
     </Routes>
   );
 }

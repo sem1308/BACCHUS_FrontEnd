@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { backEndUrl } from '../configs';
 import { useNavigate } from 'react-router-dom';
-import Header from './Header';
+import { Link } from 'react-router-dom';
+import Register from './register';
+import { Cookies, useCookies } from "react-cookie";
+import { string } from 'yup';
 
 function Login({ type }) {
     const [inputId, setInputId] = useState('')
     const [inputPw, setInputPw] = useState('')
     const navigation = useNavigate();
+    const [cookies, setCookie, removeCookie] = useCookies(['customerNum']);
 
     // input data 의 변화가 있을 때마다 value 값을 변경해서 useState 해준다
     const handleInputId = (e) => {
@@ -25,10 +29,10 @@ function Login({ type }) {
             "pw": inputPw
         })
             .then((res) => {
-                // console.log(res);
+                console.log(res);
                 // 주문내역 페이지로의 이동여부 결정
                 if (res.status === 200) {
-                    <Header auth={true} />
+                    setCookie('customerNum', res.data.customerNum);
                     if (window.confirm("주문 정보를 보시겠습니까?")) {
                         navigation(`/history/${res.data.customerNum}`);
                     } else {
@@ -56,6 +60,9 @@ function Login({ type }) {
             </div>
             <div>
                 <button type='button' onClick={onClickLogin}>Login</button>
+                <Link to={`/login/register`} element={<Register />}>
+                    <button type='button' onClick={() => { alert('회원가입 페이지로 이동하겠습니다.') }}>Signin</button>
+                </Link>
             </div>
         </div>
     )

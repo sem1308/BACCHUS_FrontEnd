@@ -1,3 +1,4 @@
+import { css } from 'styled-components';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
@@ -36,21 +37,37 @@ const NavBarContentLink = styled.span`
     font-size: 15px;
     line-height: 48px;
     text-align: center;
-
-    &:hover{  
-        color : #660000;     
-        box-shadow : 0 2px 1px 0 #decdb9;
+    
+    ${(props) =>
+        props.active ?
+        css`
+          color: #8B4513;
+          font-weight: bold;
+          box-shadow : 0 2px 1px 0 #fff;
+          border : 1px solid #A0522D;
+          border-bottom-color: #fff;
+        ` :
+        css`
+        &:hover{  
+            color : #8B4513;     
+            font-weight: bold;
+            box-shadow : 0 0 3px 0 #8B4513;
+        }`
     }
 `;
 
 function NavBar ({links}) {
+    const isActive = (path) => {
+    return window.location.pathname.startsWith(path);
+    }
+
     return (
         <NavBarBlock>
             <NavBarListBox>
                 {
                     links.map(link=>
                         <NavBarContent key={link.name}>
-                            <NavBarContentLink>
+                            <NavBarContentLink active={isActive(link.to)}>
                                 <Link className='nav-link' to={link.to}>{link.name}</Link>
                             </NavBarContentLink>
                         </NavBarContent>

@@ -6,7 +6,7 @@ import { DinnerBlock } from '../../components/Utils';
 function DinnerPage() {
     return (
         <div>
-            <Header auth={true}></Header>
+            <Header></Header>
             <DinnerBlock>
                 <NavBar></NavBar>
                 <DinnerList></DinnerList>

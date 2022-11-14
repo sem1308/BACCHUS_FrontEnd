@@ -104,7 +104,7 @@ function Header({ type }) {
                     <UtilsListBox>
                         <UtilsText>
                             {
-                                cookies === undefined ?
+                                cookies.customerNum === undefined ?
                                     <Link className='nav-link' to={"/login/" + type}>로그인 / 회원가입</Link>
                                     : <button onClick={() => {
                                         console.log(cookies);

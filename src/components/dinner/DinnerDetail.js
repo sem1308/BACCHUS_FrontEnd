@@ -54,79 +54,66 @@ function DinnerDetail({ dinnerNum }) {
     } catch (e) {
       value = 0;
     }
-    const fc = foodCounts.map(foodCount =>
-      foodCount.foodNum === Number(e.target.id) ? { ...foodCount, [e.target.name]: value } : foodCount
-    )
-    setFoodCounts(fc);
-    setTotalPrice(0);
-    fc.map(foodCount => {
-      setTotalPrice(totalPrice => totalPrice + foodCount.price * foodCount.count);
-    });
-  }
 
-  const handleChange = e => {
-    const id = e.target.id;
-    let value = e.target.value;
-    const which = e.target.name == 'address' ? orderInfo.address
-      : orderInfo.cardNum
-    setOrderInfo({
-      ...orderInfo,
-      [e.target.name]: which.map((val, i) =>
-        i === Number(id) ? value : val
-      )
-    })
-  }
 
-  const submitHandler = (event) => {
-    const registOrder = async () => {
-      try {
-        // 요청이 시작 할 때에는 error 와 foods 를 초기화하고
-        setError(null);
-        await axios.post(
-          backEndUrl + '/order', {
-          foodCountDTOs: foodCounts,
-          insertOrderDTO: {
-            "dinnerNum": [dinner.dinnerNum],
-            "customerNum": 1,
-            "totalPrice": totalPrice,
-            "styleCode": orderInfo.styleCode,
-            "wantedDeliveredTime": orderInfo.wantedDeliveredTime,
-            "address": orderInfo.address.join(''),
-            "cardNum": orderInfo.cardNum.join('')
-          }
+    const submitHandler = (event) => {
+      const registOrder = async () => {
+        try {
+          // 요청이 시작 할 때에는 error 와 foods 를 초기화하고
+          setError(null);
+          await axios.post(
+            backEndUrl+'/order', {
+              foodCountDTOs : foodCounts,
+              insertOrderDTO : {
+                "dinnerNum" : [dinner.dinnerNum],
+                "customerNum" : 3,
+                "totalPrice": totalPrice,
+                "styleCode": orderInfo.styleCode,
+                "wantedDeliveredTime" : orderInfo.wantedDeliveredTime,
+                "address" : orderInfo.address.join(','),
+                "cardNum" : orderInfo.cardNum.join('')
+              }
+            }
+          ).then(res=>
+            Swal.fire({
+              title: '주문 완료',
+              text: res.data.text,
+              icon: 'success',
+              confirmButtonText: '확인'
+            }).then((res) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (res.isConfirmed) {
+                closeModal()
+              }else{
+              }
+            })
+          ).catch(res=>
+            Swal.fire({
+              title: '주문 실패',
+              text: res.data.text,
+              icon: 'error',
+              confirmButtonText: '확인'
+            }).then((res) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (res.isConfirmed) {
+                closeModal()
+              }else{
+              }
+            })
+          );
+        } catch (e) {
+          console.log(e);
+          setError(e);
         }
-        ).then(res =>
-          Swal.fire({
-            title: '주문 완료',
-            text: res.data.text,
-            icon: 'success',
-            confirmButtonText: '확인'
-          }).then((res) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (res.isConfirmed) {
-              closeModal()
-            }
-            else {
-            }
-          })
-        ).error(res =>
-          Swal.fire({
-            title: '주문 실패',
-            text: res.data.text,
-            icon: 'error',
-            confirmButtonText: '확인'
-          }).then((res) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (res.isConfirmed) {
-              closeModal()
-            }
-            else {
-            }
-          })
-        );
-      } catch (e) {
-        console.log(e);
-        setError(e);
+      };
+
+      const form = event.currentTarget;
+      console.log(form);
+      if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }else{
+        registOrder();
       }
     };
 

@@ -6,8 +6,7 @@ import { backEndUrl } from '../configs';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 const History = () => {
-    console.log("RENDERING...");
-    const num = useParams().customerNum;
+    const num = useParams().customerNum;  // URL 정보를 이용해 고객번호 할당
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -18,27 +17,27 @@ const History = () => {
     // 버튼 id를 주문 번호로 지정
     const submitHandler = (e) => {
         const registOrder = async () => {
-            console.log(typeof (e.target.id))
             const index = user.orders.findIndex(element => element.orderNum === Number(e.target.id));
-            console.log(index);
-            // 테스트
-            const dto = {
-                foodCountDTOs: user.orders[index].foodCounts.map(fc => ({
-                    foodNum: fc.food.foodNum,
-                    count: fc.count
-                })),
-                insertOrderDTO: {
-                    "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
-                    "customerNum": user.customerNum,
-                    "totalPrice": user.orders[index].totalPrice,
-                    "styleCode": user.orders[index].style.styleCode,
-                    "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
-                    "address": user.address,
-                    "cardNum": user.cardNum
-                }
-            }
 
-            console.log(dto);
+            // 테스트
+
+            // const dto = {
+            //     foodCountDTOs: user.orders[index].foodCounts.map(fc => ({
+            //         foodNum: fc.food.foodNum,
+            //         count: fc.count
+            //     })),
+            //     insertOrderDTO: {
+            //         "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
+            //         "customerNum": user.customerNum,
+            //         "totalPrice": user.orders[index].totalPrice,
+            //         "styleCode": user.orders[index].style.styleCode,
+            //         "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
+            //         "address": user.address,
+            //         "cardNum": user.cardNum
+            //     }
+            // }
+
+            // console.log(dto);
 
             // 실제로 POST
 

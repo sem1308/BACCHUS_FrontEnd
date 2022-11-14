@@ -105,11 +105,17 @@ function Header({ type }) {
                         <UtilsText>
                             {
                                 cookies.customerNum === undefined ?
-                                    <Link className='nav-link' to={"/login/" + type}>로그인 / 회원가입</Link>
+                                    <>
+                                        <Link to={"/login/" + type}>
+                                            <button>로그인</button>
+                                        </Link>
+                                        <Link to={'/register/' + type}>
+                                            <button>회원가입</button>
+                                        </Link>
+                                    </>
                                     : <button onClick={() => {
-                                        console.log(cookies);
-                                        removeCookie('customerNum');
-                                        console.log(cookies);
+                                        removeCookie('customerNum');  // 로그인 했을 때 등록했던 쿠키 해제
+                                        console.log("로그아웃 되었습니다.");  // 로그아웃 확인
                                     }}>로그아웃</button>
                             }
                         </UtilsText>

@@ -84,32 +84,28 @@ const UtilsText = styled.li`
 `;
 
 function Header({ type }) {
-    const [cookies, setCookie, removeCookie] = useCookies(['customerNum']);
+    const [cookies, , removeCookie] = useCookies(['token']);
 
     return (
         <HeaderBlock>
             <HeaderBox>
-                <Link to="/dinner">
-                    <Logo>
-                        <LogoBox>
-                            <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
-                            <LogoTextBox>"Mr. Dinner"</LogoTextBox>
-                        </LogoBox>
-                        <LogoImgButton>
-                            <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
-                        </LogoImgButton>
-                    </Logo>
-                </Link>
+                <Logo>
+                    <Link to={"/dinner" + type}>
+                        <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
+                        <LogoTextBox>"Mr. Dinner"</LogoTextBox>
+                    </Link>
+                    <Link className='img-button' to={"/" + type}>
+                        <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
+                    </Link>
+                </Logo>
                 <Utils>
                     <UtilsListBox>
                         <UtilsText>
                             {
-                                cookies.customerNum === undefined ?
+                                !cookies.token ?
                                     <Link className='nav-link' to={"/login/" + type}>로그인 / 회원가입</Link>
                                     : <button onClick={() => {
-                                        console.log(cookies);
-                                        removeCookie('customerNum');
-                                        console.log(cookies);
+                                        removeCookie("token",{domain: "localhost"});
                                     }}>로그아웃</button>
                             }
                         </UtilsText>

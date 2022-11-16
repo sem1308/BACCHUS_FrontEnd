@@ -1,18 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 import { backEndUrl } from '../configs';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import { parseToken } from "./Utils";
 
 const History = () => {
     console.log("RENDERING...");
-    const num = useParams().customerNum;
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [cookies, , ] = useCookies(['token']);
     const navigate = useNavigate();
+    const customerNum = parseToken(cookies.token).num;
 
     // 재주문 버튼 클릭 시 이전 주문 정보 POST
     // 버튼 id를 주문 번호로 지정
@@ -29,7 +31,7 @@ const History = () => {
                 })),
                 insertOrderDTO: {
                     "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
-                    "customerNum": user.customerNum,
+                    "customerNum": customerNum,
                     "totalPrice": user.orders[index].totalPrice,
                     "styleCode": user.orders[index].style.styleCode,
                     "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
@@ -52,7 +54,7 @@ const History = () => {
                     })),
                     insertOrderDTO: {
                         "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
-                        "customerNum": user.customerNum,
+                        "customerNum": customerNum,
                         "totalPrice": user.orders[index].totalPrice,
                         "styleCode": user.orders[index].style.styleCode,
                         "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
@@ -67,9 +69,8 @@ const History = () => {
                         icon: 'success',
                         confirmButtonText: '확인'
                     }).then((res) => {
-
                         if (res.isConfirmed) {
-                            navigate(`/history/${num}`);
+                            navigate(`/history`);
                         }
                         else {
                         }
@@ -109,7 +110,7 @@ const History = () => {
                 setOrders(null);
                 setLoading(true);
                 const response = await axios.get(
-                    backEndUrl + `/customer/${num}`
+                    backEndUrl + `/customer/${customerNum}`
                 );
                 setUser(response.data);
                 setOrders(response.data.orders.reverse());

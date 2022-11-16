@@ -16,7 +16,7 @@ function EmpWorkingPage ({which}) {
 
     return (
         <div>
-            <Header></Header>
+            <Header type="employee"/>
             <DinnerBlock>
                 <NavBar links={links}></NavBar>
 

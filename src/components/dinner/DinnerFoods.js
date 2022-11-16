@@ -17,7 +17,7 @@ const DinnerFoods = ({foodCounts,handleFoodCountChange}) => {
     <DinnerDetailBox>
       {foodType.map(type=>{
         return(
-          <>
+          <div key={type}>
             <Pre lh='40px' mt='10px' fs='20px' fw='600' width='200px'>
               <ImgBox width='100px'>
                 <ContentBlock>{type}</ContentBlock>
@@ -37,7 +37,7 @@ const DinnerFoods = ({foodCounts,handleFoodCountChange}) => {
                 </ContentBlock>
               )
             })}
-          </>
+          </div>
         )
       })}
     </DinnerDetailBox> 

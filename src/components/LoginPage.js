@@ -6,12 +6,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { CustomerDiv, CustomerForm, CustomerLink, CustomerHeader, CustomerInput, CustomerButton } from './Utils';
+import { parseToken } from "./Utils";
+
 
 
 function LoginPage({ type }) {
     const [Id, setId] = useState("");
     const [Password, setPassword] = useState("");
-    const [cookies, setCookie] = useCookies(['customerNum']);
+    const [cookies, setCookie] = useCookies(['token']);
     const navigate = useNavigate();
 
     const onIdHandler = (event) => {
@@ -34,20 +36,12 @@ function LoginPage({ type }) {
         try {
             const response = await axios.post(backEndUrl + '/' + type + '/login', dataToSubmit)
             console.log(response);
-            if (response.status === 200) {
-                if (response.data.role === 'customer') {
-                    alert('로그인 되었습니다.');
-                    setCookie('customerNum', response.data.customerNum);  // 고객 쿠키 저장
-
-                    if (window.confirm("주문 내역을 보시겠습니까?")) {
-                        navigate(`/ordered_list/${response.data.customerNum}`);
-                    } else {
-                        navigate('/dinner');
-                    }
-                } else {
-                    alert('직원 페이지로 이동합니다.');
-                    navigate(`/dinner/employee`);
-                }
+            alert('로그인 되었습니다.');
+            setCookie('token', response.data.data);  // 고객 쿠키 저장
+            if (window.confirm("주문 내역을 보시겠습니까?")) {
+                navigate(`/ordered_list/${parseToken(response.data.data).num}`);
+            } else {
+                navigate('/dinner');
             }
         } catch (e) {
             console.log(e);

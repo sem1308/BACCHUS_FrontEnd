@@ -95,7 +95,6 @@ const UtilsText = styled.li`
 `;
 
 function Header({ type }) {
-    console.log('RENDERING...');
     const [cookies, , removeCookie] = useCookies(['token']);
 
     return (
@@ -114,7 +113,7 @@ function Header({ type }) {
                     <UtilsListBox>
                         <UtilsText>
                             {
-                                cookies.customerNum === undefined ?
+                                cookies.token === undefined ?
                                     <div>
                                         <Link to={"/login/" + type}>
                                             <UserButton>로그인</UserButton>
@@ -129,8 +128,8 @@ function Header({ type }) {
                                             <UserButton>과거 주문내역 조회</UserButton>
                                         </Link>
                                         <UserButton onClick={() => {
-                                            removeCookie('customerNum');  // 로그인 했을 때 등록했던 쿠키 해제
-                                            console.log("로그아웃 되었습니다.");  // 로그아웃 확인
+                                            removeCookie('token');  // 로그인 했을 때 등록했던 쿠키 해제
+                                            alert('로그아웃 되었습니다.');
                                         }}>로그아웃</UserButton>
                                     </div>
                             }

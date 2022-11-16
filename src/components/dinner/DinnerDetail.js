@@ -38,7 +38,7 @@ function DinnerDetail({ dinnerNum }) {
   const [validated, setValidated] = useState(false);
   const [customer, setCustomer] = useState(false);
   const navigation = useNavigate();
-  const [cookies, , ] = useCookies(['token']);
+  const [cookies, ,] = useCookies(['token']);
 
   const openModal = () => {
     setModalOpen(true);
@@ -84,19 +84,19 @@ function DinnerDetail({ dinnerNum }) {
       // 요청이 시작 할 때에는 error 와 foods 를 초기화하고
       setError(null);
       await axios.post(
-        backEndUrl+'/order', {
-          foodCountDTOs : foodCounts,
-          insertOrderDTO : {
-            "dinnerNum" : [dinner.dinnerNum],
-            "customerNum" : customer.num,
-            "totalPrice": totalPrice,
-            "styleCode": orderInfo.styleCode,
-            "wantedDeliveredTime" : orderInfo.wantedDeliveredTime,
-            "address" : orderInfo.address.join(','),
-            "cardNum" : orderInfo.cardNum.join('')
-          }
+        backEndUrl + '/order', {
+        foodCountDTOs: foodCounts,
+        insertOrderDTO: {
+          "dinnerNum": [dinner.dinnerNum],
+          "customerNum": customer.num,
+          "totalPrice": totalPrice,
+          "styleCode": orderInfo.styleCode,
+          "wantedDeliveredTime": orderInfo.wantedDeliveredTime,
+          "address": orderInfo.address.join(','),
+          "cardNum": orderInfo.cardNum.join('')
         }
-      ).then(res=>
+      }
+      ).then(res =>
         Swal.fire({
           title: '주문 완료',
           text: res.data.text,
@@ -107,10 +107,10 @@ function DinnerDetail({ dinnerNum }) {
           if (res.isConfirmed) {
             closeModal();
             navigation('/dinner');
-          }else{
+          } else {
           }
         })
-      ).catch(error=>
+      ).catch(error =>
         Swal.fire({
           title: '주문 실패',
           text: error.response.data.message,
@@ -136,9 +136,9 @@ function DinnerDetail({ dinnerNum }) {
   }
 
   useEffect(() => {
-    if(checkLogin()){
+    if (checkLogin()) {
       navigation('/login');
-    }else{
+    } else {
       const fetchDinner = async () => {
         try {
           // 요청이 시작 할 때에는 error 와 dinners 를 초기화하고
@@ -168,7 +168,7 @@ function DinnerDetail({ dinnerNum }) {
             backEndUrl + '/dinner/' + dinnerNum
           ).then(response => {
             setDinner(response.data)
-  
+
             response.data.foodCounts.map(foodCount => {
               setTotalPrice(totalPrice => totalPrice + foodCount.food.price * foodCount.count);
               const findIndex = temp_Foods.findIndex(element => element.foodNum === Number(foodCount.food.foodNum));
@@ -180,19 +180,19 @@ function DinnerDetail({ dinnerNum }) {
                 };
               }
             });
-            setFoodCounts(temp_Foods);  
+            setFoodCounts(temp_Foods);
           });
-  
+
           await axios.get(
             backEndUrl + '/customer/' + cust.num
           ).then(response => {
             setOrderInfo(order => ({
               ...order,
-              address : response.data.address.split(","),
-              cardNum : [0,1,2,3].map((i)=>response.data.cardNum.slice(i*4,i*4+4))
+              address: response.data.address.split(","),
+              cardNum: [0, 1, 2, 3].map((i) => response.data.cardNum.slice(i * 4, i * 4 + 4))
             }))
           });
-  
+
         } catch (e) {
           console.log(e)
           setError(e);

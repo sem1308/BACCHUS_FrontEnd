@@ -6,14 +6,13 @@ import { backEndUrl } from '../configs';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import { parseToken } from "./Utils";
 
-const History = () => {
+const OrderedListPage = () => {
     console.log("RENDERING...");
-    const num = useParams().customerNum;
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [cookies, , ] = useCookies(['token']);
+    const [cookies, ,] = useCookies(['token']);
     const navigate = useNavigate();
     const customerNum = parseToken(cookies.token).num;
 
@@ -23,27 +22,6 @@ const History = () => {
     const submitHandler = (e) => {
         const registOrder = async () => {
             const index = user.orders.findIndex(element => element.orderNum === Number(e.target.id));
-            console.log(index);
-            // 테스트
-            const dto = {
-                foodCountDTOs: user.orders[index].foodCounts.map(fc => ({
-                    foodNum: fc.food.foodNum,
-                    count: fc.count
-                })),
-                insertOrderDTO: {
-                    "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
-                    "customerNum": user.customerNum,
-                    "totalPrice": user.orders[index].totalPrice,
-                    "styleCode": user.orders[index].style.styleCode,
-                    "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
-                    "address": user.address,
-                    "cardNum": user.cardNum
-                }
-            }
-
-            console.log(dto);
-
-            // 실제로 POST
 
             try {
                 setError(null);
@@ -55,7 +33,7 @@ const History = () => {
                     })),
                     insertOrderDTO: {
                         "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
-                        "customerNum": customerNum,
+                        "customerNum": user.customerNum,
                         "totalPrice": user.orders[index].totalPrice,
                         "styleCode": user.orders[index].style.styleCode,
                         "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
@@ -72,7 +50,7 @@ const History = () => {
                     }).then((res) => {
 
                         if (res.isConfirmed) {
-                            navigate(`/history/${num}`);
+                            navigate(`/history/${customerNum}`);
                         }
                         else {
                         }
@@ -116,7 +94,6 @@ const History = () => {
                 );
                 setUser(response.data);
                 setOrders(response.data.orders.reverse());
-                // console.log(response);
             } catch (e) {
                 console.log(e);
                 setError(e);

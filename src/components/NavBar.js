@@ -1,6 +1,6 @@
 import { css } from 'styled-components';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const NavBarBlock = styled.nav`
     display: block;
@@ -40,14 +40,14 @@ const NavBarContentLink = styled.span`
     
     ${(props) =>
         props.active ?
-        css`
+            css`
           color: #8B4513;
           font-weight: bold;
           box-shadow : 0 2px 1px 0 #fff;
           border : 1px solid #A0522D;
           border-bottom-color: #fff;
         ` :
-        css`
+            css`
         &:hover{  
             color : #8B4513;     
             font-weight: bold;
@@ -56,16 +56,16 @@ const NavBarContentLink = styled.span`
     }
 `;
 
-function NavBar ({links}) {
+function NavBar({ links }) {
     const isActive = (path) => {
-    return window.location.pathname.startsWith(path);
+        return window.location.pathname.startsWith(path);
     }
 
     return (
         <NavBarBlock>
             <NavBarListBox>
                 {
-                    links.map(link=>
+                    links.map(link =>
                         <NavBarContent key={link.name}>
                             <NavBarContentLink active={isActive(link.to)}>
                                 <Link className='nav-link' to={link.to}>{link.name}</Link>
@@ -81,10 +81,10 @@ function NavBar ({links}) {
 NavBar.defaultProps = {
     links: [
         {
-            'name':'메뉴',
-            'to' : '/dinner'
+            'name': '메뉴',
+            'to': '/dinner'
         }
     ]
-  }
+}
 
 export default NavBar;

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { backEndUrl } from '../configs';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 
-const History = () => {
+const OrderedListPage = () => {
     const num = useParams().customerNum;  // URL 정보를 이용해 고객번호 할당
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState(null);
@@ -13,34 +13,12 @@ const History = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+
     // 재주문 버튼 클릭 시 이전 주문 정보 POST
     // 버튼 id를 주문 번호로 지정
     const submitHandler = (e) => {
         const registOrder = async () => {
             const index = user.orders.findIndex(element => element.orderNum === Number(e.target.id));
-
-            // 테스트
-
-            // const dto = {
-            //     foodCountDTOs: user.orders[index].foodCounts.map(fc => ({
-            //         foodNum: fc.food.foodNum,
-            //         count: fc.count
-            //     })),
-            //     insertOrderDTO: {
-            //         "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
-            //         "customerNum": user.customerNum,
-            //         "totalPrice": user.orders[index].totalPrice,
-            //         "styleCode": user.orders[index].style.styleCode,
-            //         "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
-            //         "address": user.address,
-            //         "cardNum": user.cardNum
-            //     }
-            // }
-
-            // console.log(dto);
-
-            // 실제로 POST
-
             try {
                 setError(null);
                 await axios.post(
@@ -59,42 +37,43 @@ const History = () => {
                         "cardNum": user.cardNum
                     }
                 }
-                ).then(res =>
-                    Swal.fire({
-                        title: '주문 완료',
-                        text: res.data.text,
-                        icon: 'success',
-                        confirmButtonText: '확인'
-                    }).then((res) => {
-
-                        if (res.isConfirmed) {
-                            navigate(`/history/${num}`);
-                        }
-                        else {
-                        }
-                    })
-                ).catch(res =>
-                    Swal.fire({
-                        title: '주문 실패',
-                        text: res.data.text,
-                        icon: 'error',
-                        confirmButtonText: '확인'
-                    }).then((res) => {
-                        if (res.isConfirmed) {
-                            alert("주문을 실패했습니다.")
-                        }
-                        else {
-                        }
-                    })
-                );
+                )
+                    .then(res => {
+                        Swal.fire({
+                            title: '주문 완료',
+                            text: res.data.text,
+                            icon: 'success',
+                            confirmButtonText: '확인'
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                navigate(`/order_check`);
+                            }
+                            else {
+                            }
+                        })
+                    }
+                    ).catch(res =>
+                        Swal.fire({
+                            title: '주문 실패',
+                            text: res.data.text,
+                            icon: 'error',
+                            confirmButtonText: '확인'
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                alert("주문을 실패했습니다.")
+                            }
+                            else {
+                            }
+                        })
+                    );
             } catch (e) {
                 setError(e);
+                console.log(e);
             }
         };
         if (window.confirm("이전과 동일하게 주문하시겠습니까?")) {
             registOrder();
         } else {
-
         }
     }
 
@@ -112,8 +91,9 @@ const History = () => {
                 );
                 setUser(response.data);
                 setOrders(response.data.orders.reverse());
+                // console.log(response);
             } catch (e) {
-                console.log('asdsaawdwd');
+                console.log(e);
                 setError(e);
             }
             setLoading(false);
@@ -151,4 +131,4 @@ const History = () => {
     );
 }
 
-export default History;
+export default OrderedListPage;

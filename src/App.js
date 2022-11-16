@@ -1,6 +1,6 @@
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
-import History from './components/History';
+import OrderedListPage from './components/OrderedListPage';
 import './css/App.css';
 import { Route, Routes } from 'react-router-dom';
 import DinnerPage from './pages/customer/DinnerPage';
@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route path="/dinner" element={<DinnerPage />} />
       <Route path="/dinner/:dinnerNum" element={<DinnerDetailPage />} />
-      <Route path="/history/:customerNum" element={<History />} />
+      <Route path="/ordered_list/:customerNum" element={<OrderedListPage />} />
 
       <Route path="/login/" element={<LoginPage type='customer' />} />
       <Route path="/register/" element={<RegisterPage type='customer' />} />

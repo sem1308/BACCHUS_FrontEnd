@@ -1,5 +1,5 @@
-export const backEndUrl = 'http://localhost:8080'
-//export const backEndUrl = 'http://52.79.168.20:8080'
+// export const backEndUrl = 'http://localhost:8080'
+export const backEndUrl = 'http://52.79.168.20:8080'
 
 export const foodType = [
     '고기',

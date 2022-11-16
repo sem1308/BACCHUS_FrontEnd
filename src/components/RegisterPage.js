@@ -60,10 +60,8 @@ function RegisterPage({ type }) {
         try {
             const response = await axios.post(backEndUrl + '/' + type, dataToSubmit)
             console.log(response);
-            if (response.status === 200) {
-                alert('회원가입 되었습니다.');
-                navigate(`/login/`);
-            }
+            alert('회원가입 되었습니다.');
+            navigate(`/login/`);
         } catch (e) {
             console.log(e);
         }

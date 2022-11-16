@@ -7,7 +7,6 @@ import Swal from 'sweetalert2/dist/sweetalert2.js'
 import { parseToken } from "./Utils";
 
 const OrderedListPage = () => {
-    console.log("RENDERING...");
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);

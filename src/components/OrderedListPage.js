@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 import { backEndUrl } from '../configs';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import { parseToken } from "./Utils";
 
 const History = () => {
     console.log("RENDERING...");
@@ -12,13 +13,15 @@ const History = () => {
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [cookies, , ] = useCookies(['token']);
     const navigate = useNavigate();
+    const customerNum = parseToken(cookies.token).num;
+
 
     // 재주문 버튼 클릭 시 이전 주문 정보 POST
     // 버튼 id를 주문 번호로 지정
     const submitHandler = (e) => {
         const registOrder = async () => {
-            console.log(typeof (e.target.id))
             const index = user.orders.findIndex(element => element.orderNum === Number(e.target.id));
             console.log(index);
             // 테스트
@@ -52,7 +55,7 @@ const History = () => {
                     })),
                     insertOrderDTO: {
                         "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
-                        "customerNum": user.customerNum,
+                        "customerNum": customerNum,
                         "totalPrice": user.orders[index].totalPrice,
                         "styleCode": user.orders[index].style.styleCode,
                         "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
@@ -90,12 +93,12 @@ const History = () => {
                 );
             } catch (e) {
                 setError(e);
+                console.log(e);
             }
         };
         if (window.confirm("이전과 동일하게 주문하시겠습니까?")) {
             registOrder();
         } else {
-
         }
     }
 
@@ -109,12 +112,13 @@ const History = () => {
                 setOrders(null);
                 setLoading(true);
                 const response = await axios.get(
-                    backEndUrl + `/customer/${num}`
+                    backEndUrl + `/customer/${customerNum}`
                 );
                 setUser(response.data);
                 setOrders(response.data.orders.reverse());
+                // console.log(response);
             } catch (e) {
-                console.log('asdsaawdwd');
+                console.log(e);
                 setError(e);
             }
             setLoading(false);
@@ -152,4 +156,4 @@ const History = () => {
     );
 }
 
-export default History;
+export default OrderedListPage;

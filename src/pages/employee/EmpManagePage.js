@@ -18,7 +18,7 @@ function EmpManagePage ({which}) {
 
     return (
         <div>
-            <Header></Header>
+            <Header type='employee'/>
             <DinnerBlock>
                 <NavBar links={links}></NavBar>
                 {which === 'food' ? 

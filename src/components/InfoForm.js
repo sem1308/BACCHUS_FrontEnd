@@ -8,11 +8,11 @@ export const CardForm = ({cardNum,handleChange}) => {
       {cardNum.map((card,i)=>{
         const hypoon = i!== 3 ? ' - ' : ''
         return(
-          <>
+          <ContentBlock key={String(i)} display='flex'>
             <Form.Control required maxLength={4} pattern='[0-9]{4}' id={String(i)} className="text-center" name="cardNum" 
                           value={card} onChange={handleChange} placeholder="0000"/>
             <ContentBlock padding='0 5px'>{hypoon}</ContentBlock>
-          </>
+          </ContentBlock>
         )}
       )}
     </ContentBlock>

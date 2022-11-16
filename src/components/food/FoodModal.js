@@ -12,7 +12,6 @@ const ImgBlock = styled.div`
 `
 
 const FoodModal = ({food, imageSrc, handleChange, submitHandler, isExist}) => {
-
   return(
     <ModalBlock>
       <ImgBlock>
@@ -39,6 +38,13 @@ const FoodModal = ({food, imageSrc, handleChange, submitHandler, isExist}) => {
                 <option key={type} value={type}>{type}</option>
               )
             }
+          </Form.Select>        
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formBasicStock">
+          <Form.Label>상태</Form.Label>
+          <Form.Select name="state" value={food.state} onChange={handleChange} aria-label="Default select example">
+            <option value="SA">판매 가능</option>
+            <option value="SNA">판매 불가</option>
           </Form.Select>        
         </Form.Group>
         <ButtonBlock>

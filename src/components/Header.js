@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const HeaderBlock = styled.header`
     position: fixed;
@@ -73,6 +74,17 @@ const Utils = styled.div`
     right: 0;
 `;
 
+const UserButton = styled.button`
+    margin-left: 5px;
+    margin-right: 5px;
+    border: solid 2px #8B4513;
+    border-radius: 12px;
+    color: #8B4513;
+    font-weight: bold;
+    box-shadow : 0 2px 1px 0 #fff;
+    background-color: transparent;
+`;
+
 const UtilsListBox = styled.ul`
     list-style: none;
 `;
@@ -82,32 +94,45 @@ const UtilsText = styled.li`
     border-radius: 10%;
 `;
 
-function Header({ type, auth }) {
-    console.log("RENDERING...");
-    const [au, setAuth] = useState(true);
-    console.log(au);
+function Header({ type }) {
+    console.log('RENDERING...');
+    const [cookies, , removeCookie] = useCookies(['token']);
 
     return (
         <HeaderBlock>
             <HeaderBox>
-                <Link to="/dinner">
-                    <Logo>
-                        <LogoBox>
-                            <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
-                            <LogoTextBox>"Mr. Dinner"</LogoTextBox>
-                        </LogoBox>
-                        <LogoImgButton>
-                            <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
-                        </LogoImgButton>
-                    </Logo>
-                </Link>
+                <Logo>
+                    <Link to={"/dinner" + type}>
+                        <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
+                        <LogoTextBox>"Mr. Dinner"</LogoTextBox>
+                    </Link>
+                    <Link className='img-button' to={"/" + type}>
+                        <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
+                    </Link>
+                </Logo>
                 <Utils>
                     <UtilsListBox>
                         <UtilsText>
                             {
-                                !au ?
-                                    <Link className='nav-link' to={"/login/" + type} element={<Header auth={true} />}>로그인 / 회원가입</Link>
-                                    : <button onClick={() => { setAuth(!au) }}>로그아웃</button>
+                                cookies.customerNum === undefined ?
+                                    <div>
+                                        <Link to={"/login/" + type}>
+                                            <UserButton>로그인</UserButton>
+                                        </Link>
+                                        <Link to={'/register/' + type}>
+                                            <UserButton>회원가입</UserButton>
+                                        </Link>
+                                    </div>
+                                    :
+                                    <div>
+                                        <Link to={`/ordered_list/${cookies.customerNum}`}>
+                                            <UserButton>과거 주문내역 조회</UserButton>
+                                        </Link>
+                                        <UserButton onClick={() => {
+                                            removeCookie('customerNum');  // 로그인 했을 때 등록했던 쿠키 해제
+                                            console.log("로그아웃 되었습니다.");  // 로그아웃 확인
+                                        }}>로그아웃</UserButton>
+                                    </div>
                             }
                         </UtilsText>
                     </UtilsListBox>

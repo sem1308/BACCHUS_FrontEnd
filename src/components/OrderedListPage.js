@@ -8,6 +8,7 @@ import { parseToken } from "./Utils";
 
 const History = () => {
     console.log("RENDERING...");
+    const num = useParams().customerNum;
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -16,11 +17,11 @@ const History = () => {
     const navigate = useNavigate();
     const customerNum = parseToken(cookies.token).num;
 
+
     // 재주문 버튼 클릭 시 이전 주문 정보 POST
     // 버튼 id를 주문 번호로 지정
     const submitHandler = (e) => {
         const registOrder = async () => {
-            console.log(typeof (e.target.id))
             const index = user.orders.findIndex(element => element.orderNum === Number(e.target.id));
             console.log(index);
             // 테스트
@@ -31,7 +32,7 @@ const History = () => {
                 })),
                 insertOrderDTO: {
                     "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
-                    "customerNum": customerNum,
+                    "customerNum": user.customerNum,
                     "totalPrice": user.orders[index].totalPrice,
                     "styleCode": user.orders[index].style.styleCode,
                     "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
@@ -69,8 +70,9 @@ const History = () => {
                         icon: 'success',
                         confirmButtonText: '확인'
                     }).then((res) => {
+
                         if (res.isConfirmed) {
-                            navigate(`/history`);
+                            navigate(`/history/${num}`);
                         }
                         else {
                         }
@@ -91,12 +93,12 @@ const History = () => {
                 );
             } catch (e) {
                 setError(e);
+                console.log(e);
             }
         };
         if (window.confirm("이전과 동일하게 주문하시겠습니까?")) {
             registOrder();
         } else {
-
         }
     }
 
@@ -114,8 +116,9 @@ const History = () => {
                 );
                 setUser(response.data);
                 setOrders(response.data.orders.reverse());
+                // console.log(response);
             } catch (e) {
-                console.log('asdsaawdwd');
+                console.log(e);
                 setError(e);
             }
             setLoading(false);
@@ -153,4 +156,4 @@ const History = () => {
     );
 }
 
-export default History;
+export default OrderedListPage;

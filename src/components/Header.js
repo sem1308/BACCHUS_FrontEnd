@@ -74,6 +74,17 @@ const Utils = styled.div`
     right: 0;
 `;
 
+const UserButton = styled.button`
+    margin-left: 5px;
+    margin-right: 5px;
+    border: solid 2px #8B4513;
+    border-radius: 12px;
+    color: #8B4513;
+    font-weight: bold;
+    box-shadow : 0 2px 1px 0 #fff;
+    background-color: transparent;
+`;
+
 const UtilsListBox = styled.ul`
     list-style: none;
 `;
@@ -84,6 +95,7 @@ const UtilsText = styled.li`
 `;
 
 function Header({ type }) {
+    console.log('RENDERING...');
     const [cookies, , removeCookie] = useCookies(['token']);
 
     return (
@@ -102,11 +114,25 @@ function Header({ type }) {
                     <UtilsListBox>
                         <UtilsText>
                             {
-                                !cookies.token ?
-                                    <Link className='nav-link' to={"/login/" + type}>로그인 / 회원가입</Link>
-                                    : <button onClick={() => {
-                                        removeCookie("token",{domain: "localhost"});
-                                    }}>로그아웃</button>
+                                cookies.customerNum === undefined ?
+                                    <div>
+                                        <Link to={"/login/" + type}>
+                                            <UserButton>로그인</UserButton>
+                                        </Link>
+                                        <Link to={'/register/' + type}>
+                                            <UserButton>회원가입</UserButton>
+                                        </Link>
+                                    </div>
+                                    :
+                                    <div>
+                                        <Link to={`/ordered_list/${cookies.customerNum}`}>
+                                            <UserButton>과거 주문내역 조회</UserButton>
+                                        </Link>
+                                        <UserButton onClick={() => {
+                                            removeCookie('customerNum');  // 로그인 했을 때 등록했던 쿠키 해제
+                                            console.log("로그아웃 되었습니다.");  // 로그아웃 확인
+                                        }}>로그아웃</UserButton>
+                                    </div>
                             }
                         </UtilsText>
                     </UtilsListBox>

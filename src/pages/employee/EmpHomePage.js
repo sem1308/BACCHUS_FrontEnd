@@ -1,6 +1,9 @@
 import Header from '../../components/Header';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 
 const HomeBlock = styled.div`
     width: 1220px;
@@ -30,9 +33,23 @@ const LinkBlock = styled.div`
 `;
 
 function EmpHomePage () {
+    const navigation = useNavigate();
+    
+    const [cookies, , ] = useCookies(['token']);
+
+    const checkLogin = () => {
+        return cookies.token === undefined;
+      }
+
+    useEffect(()=>{
+        if(checkLogin()){
+            navigation('/login/employee');
+        }
+    })
+
     return (
         <div>
-            <Header type='employee'></Header>
+            <Header type='employee'/>
             <HomeBlock>
                 <LinkBlock>
                     <Link className='link' to="/food/employee">Food / Dinner</Link>

@@ -107,6 +107,28 @@ export const Btn = styled.button`
   }
 `
 
+export const parseToken = (token) => {
+  let base64Url = token.split('.')[1];
+  let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  let jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
+
+export const encodeFileToBase64 = (fileBlob, setImageSrc) => {
+  console.log(fileBlob);
+  const reader = new FileReader();
+  reader.readAsDataURL(fileBlob);
+  return new Promise((resolve) => {
+    reader.onload = () => {
+      setImageSrc(reader.result);
+      resolve();
+    };
+  });
+};
+
 /* 로그인, 회원가입 */
 
 export const CustomerDiv = styled.div`

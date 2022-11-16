@@ -10,7 +10,8 @@ const FoodInit = {
   'name' : '',
   'price' : 0,
   'stock' : 0,
-  'type' : foodType[0]
+  'type' : foodType[0],
+  'state' : 'SA'
 }
 
 function FoodList() {
@@ -41,12 +42,19 @@ function FoodList() {
   };
 
   const handleChange = e => {
+    let value = e.target.value;
     if(e.target.name==='type'){
       setImageSrc('/imgs/foods/'+e.target.value+'.PNG')
+    }else if(e.target.name==='price' || e.target.name==='stock'){
+      try{
+        value = Number(e.target.value);
+      }catch(e){
+        value = 0;
+      }
     }
     setFood({
       ...food,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     })
   }
 
@@ -54,7 +62,6 @@ function FoodList() {
     const registFoods = async () => {
       try {
         // 요청이 시작 할 때에는 error 와 foods 를 초기화하고
-        setError(null);
         if(isExist){
           await axios.put(
             backEndUrl+'/food/'+food.foodNum, food
@@ -67,7 +74,6 @@ function FoodList() {
         fetchFoods();
       } catch (e) {
         console.log(e)
-        setError(e);
       }
     };
     registFoods();
@@ -82,7 +88,6 @@ function FoodList() {
       // loading 상태를 true 로 바꿉니다.
       setLoading(true);
       const response = await axios.get(
-        //'http://13.125.101.4:8080/dinner'
         backEndUrl+'/food'
       );
       setFoods(response.data); // 데이터는 response.data 안에 들어있습니다.

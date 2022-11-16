@@ -96,22 +96,20 @@ const UtilsText = styled.li`
 
 function Header({ type }) {
     console.log('RENDERING...');
-    const [cookies, setCookie, removeCookie] = useCookies(['customerNum']);
+    const [cookies, , removeCookie] = useCookies(['token']);
 
     return (
         <HeaderBlock>
             <HeaderBox>
-                <Link to="/dinner">
-                    <Logo>
-                        <LogoBox>
-                            <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
-                            <LogoTextBox>"Mr. Dinner"</LogoTextBox>
-                        </LogoBox>
-                        <LogoImgButton>
-                            <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
-                        </LogoImgButton>
-                    </Logo>
-                </Link>
+                <Logo>
+                    <Link to={"/dinner" + type}>
+                        <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
+                        <LogoTextBox>"Mr. Dinner"</LogoTextBox>
+                    </Link>
+                    <Link className='img-button' to={"/" + type}>
+                        <LogoImgBox src='/logos/logo.PNG'></LogoImgBox>
+                    </Link>
+                </Logo>
                 <Utils>
                     <UtilsListBox>
                         <UtilsText>

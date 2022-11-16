@@ -11,6 +11,10 @@ const TD = styled.td`
 `
 
 const FoodTable = ({foods, openModal}) => {
+  const stateToWord = {
+    "SA" : "판매 가능" ,
+    "SNA" : "판매 불가"
+  };
 
   return(
     <Table responsive="lg">
@@ -20,6 +24,7 @@ const FoodTable = ({foods, openModal}) => {
           <TH>이름</TH>
           <TH>가격</TH>
           <TH>수량</TH>
+          <TH>상태</TH>
           <TH width='100px'></TH>
         </tr>
       </thead>
@@ -29,6 +34,7 @@ const FoodTable = ({foods, openModal}) => {
           <TD>{food.name}</TD>
           <TD>{food.price}</TD>
           <TD>{food.stock}</TD>
+          <TD>{stateToWord[food.state]}</TD>
           <Btn onClick={()=>openModal(food)}>수정</Btn>
         </tr>
       ))}

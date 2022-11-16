@@ -2,14 +2,15 @@ import Header from '../Header';
 import styled from 'styled-components';
 import NavBar from '../NavBar';
 import { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { backEndUrl } from '../../configs';
+import { useNavigate } from 'react-router-dom';
 import Modal from '../Modal';
-import { DinnerBlock, ContentBlock, Img, ImgBox, ButtonBlock, Btn, Pre } from '../Utils';
-
+import { DinnerBlock, ContentBlock, Img, ImgBox, ButtonBlock, Btn, Pre, parseToken } from '../Utils';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import DinnerFoods from './DinnerFoods';
-import DinnerModal from './DinnerModal';
+import OrderDinnerModal from './OrderDinnerModal';
 
 const DetailTextBlock = styled.div`
   position : ${props => props.position || 'relative'};
@@ -35,8 +36,9 @@ function DinnerDetail({ dinnerNum }) {
   const [orderInfo, setOrderInfo] = useState(initOrderInfo);
   const [modalOpen, setModalOpen] = useState(false);
   const [validated, setValidated] = useState(false);
-
-  console.log("START");
+  const [customer, setCustomer] = useState(false);
+  const navigation = useNavigate();
+  const [cookies, , ] = useCookies(['token']);
 
   const openModal = () => {
     setModalOpen(true);
@@ -67,7 +69,7 @@ function DinnerDetail({ dinnerNum }) {
   const handleChange = e => {
     const id = e.target.id;
     let value = e.target.value;
-    const which = e.target.name == 'address' ? orderInfo.address
+    const which = e.target.name === 'address' ? orderInfo.address
       : orderInfo.cardNum
     setOrderInfo({
       ...orderInfo,
@@ -86,7 +88,7 @@ function DinnerDetail({ dinnerNum }) {
           foodCountDTOs : foodCounts,
           insertOrderDTO : {
             "dinnerNum" : [dinner.dinnerNum],
-            "customerNum" : 3,
+            "customerNum" : customer.num,
             "totalPrice": totalPrice,
             "styleCode": orderInfo.styleCode,
             "wantedDeliveredTime" : orderInfo.wantedDeliveredTime,
@@ -103,7 +105,8 @@ function DinnerDetail({ dinnerNum }) {
         }).then((res) => {
           /* Read more about isConfirmed, isDenied below */
           if (res.isConfirmed) {
-            closeModal()
+            closeModal();
+            navigation('/dinner');
           }else{
           }
         })
@@ -118,7 +121,6 @@ function DinnerDetail({ dinnerNum }) {
     };
 
     const form = event.currentTarget;
-    console.log(form);
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
@@ -128,64 +130,83 @@ function DinnerDetail({ dinnerNum }) {
     setValidated(true);
   };
 
+  const checkLogin = () => {
+    console.log(cookies.token);
+    return cookies.token === undefined;
+  }
+
   useEffect(() => {
-    const fetchDinner = async () => {
-      try {
-        // 요청이 시작 할 때에는 error 와 dinners 를 초기화하고
-        setError(null);
-        setDinner(null);
-        setFoodCounts([]);
-        // loading 상태를 true 로 바꿉니다.
-        setLoading(true);
+    if(checkLogin()){
+      navigation('/login');
+    }else{
+      const fetchDinner = async () => {
+        try {
+          // 요청이 시작 할 때에는 error 와 dinners 를 초기화하고
+          setError(null);
+          setDinner(null);
+          setFoodCounts([]);
+          // loading 상태를 true 로 바꿉니다.
+          setLoading(true);
+          const cust = await parseToken(cookies.token);
+          setCustomer(cust);
 
-        let temp_Foods = [];
-        await axios.get(
-          backEndUrl + '/food'
-        ).then(response => {
-          temp_Foods = response.data.map(food => (
-            {
-              foodNum: food.foodNum,
-              count: 0,
-              type: food.type,
-              name: food.name,
-              price: food.price
-            }))
-        });
-
-        await axios.get(
-          //'http://13.125.101.4:8080/dinner/'+dinnerNum
-          backEndUrl + '/dinner/' + dinnerNum
-        ).then(response => {
-          setDinner(response.data)
-
-          response.data.foodCounts.map(foodCount => {
-            setTotalPrice(totalPrice => totalPrice + foodCount.food.price * foodCount.count);
-            const findIndex = temp_Foods.findIndex(element => element.foodNum === Number(foodCount.food.foodNum));
-            if (findIndex != -1) {
-              temp_Foods[findIndex] = {
-                ...temp_Foods[findIndex],
-                count: foodCount.count,
-                foodDinnerCountNum: foodCount.foodDinnerCountNum
-              };
-            }
+          let temp_Foods = [];
+          await axios.get(
+            backEndUrl + '/food'
+          ).then(response => {
+            temp_Foods = response.data.map(food => (
+              {
+                foodNum: food.foodNum,
+                count: 0,
+                type: food.type,
+                name: food.name,
+                price: food.price
+              }))
           });
-          setFoodCounts(temp_Foods);
-        });
-      } catch (e) {
-        console.log(e)
-        setError(e);
-      }
-      setLoading(false);
-    };
-    setTotalPrice(0);
-    fetchDinner();
+          await axios.get(
+            //'http://13.125.101.4:8080/dinner/'+dinnerNum
+            backEndUrl + '/dinner/' + dinnerNum
+          ).then(response => {
+            setDinner(response.data)
+  
+            response.data.foodCounts.map(foodCount => {
+              setTotalPrice(totalPrice => totalPrice + foodCount.food.price * foodCount.count);
+              const findIndex = temp_Foods.findIndex(element => element.foodNum === Number(foodCount.food.foodNum));
+              if (findIndex !== -1) {
+                temp_Foods[findIndex] = {
+                  ...temp_Foods[findIndex],
+                  count: foodCount.count,
+                  foodDinnerCountNum: foodCount.foodDinnerCountNum
+                };
+              }
+            });
+            setFoodCounts(temp_Foods);  
+          });
+  
+          await axios.get(
+            backEndUrl + '/customer/' + cust.num
+          ).then(response => {
+            setOrderInfo(order => ({
+              ...order,
+              address : response.data.address.split(","),
+              cardNum : [0,1,2,3].map((i)=>response.data.cardNum.slice(i*4,i*4+4))
+            }))
+          });
+  
+        } catch (e) {
+          console.log(e)
+          setError(e);
+        }
+        setLoading(false);
+      };
+      setTotalPrice(0);
+      fetchDinner();
+    }
   }, [dinnerNum]);
 
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다</div>;
   if (!dinner) return null;
-
-  console.log(orderInfo);
 
   return (
     <div>
@@ -213,7 +234,7 @@ function DinnerDetail({ dinnerNum }) {
         </ContentBlock>
       </DinnerBlock>
       <Modal open={modalOpen} close={closeModal} header="주문">
-        <DinnerModal foodCounts={foodCounts} handleChange={handleChange} submitHandler={submitHandler}
+        <OrderDinnerModal foodCounts={foodCounts} handleChange={handleChange} submitHandler={submitHandler}
           orderInfo={orderInfo} setOrderInfo={setOrderInfo} validated={validated}
           dinner={dinner} totalPrice={totalPrice} initTime={initTime} />
       </Modal>

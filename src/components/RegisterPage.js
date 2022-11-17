@@ -43,17 +43,17 @@ function RegisterPage({ type }) {
 
         if (Password !== ConfirmPassword) {
             alert('비밀번호와 비밀번호 확인이 같지 않습니다.')
-        }
+        } else {
+            let body = {
+                address: Address,
+                cardNum: CardNum,
+                id: Id,
+                name: Name,
+                pw: Password,
+            }
 
-        let body = {
-            address: Address,
-            cardNum: CardNum,
-            id: Id,
-            name: Name,
-            pw: Password,
+            signupCustomer(body);
         }
-
-        signupCustomer(body);
     }
 
     const signupCustomer = async (dataToSubmit) => {
@@ -63,6 +63,7 @@ function RegisterPage({ type }) {
             alert('회원가입 되었습니다.');
             navigate(`/login/`);
         } catch (e) {
+            alert(e.response.data.message);
             console.log(e);
         }
     }

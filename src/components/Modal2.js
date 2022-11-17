@@ -2,17 +2,14 @@ import React from 'react';
 import '../css/modal.css';
 
 const Modal2 = (props) => {
-    console.log('\n######################\n')
-
-    // 열기, 닫기, 모달 헤더 텍스트를 부모로부터 받아옴
     const { header, id, modalVisibleId, setModalVisibleId } = props;
 
     const onCloseHandler = () => {
         setModalVisibleId("")
     }
 
-    console.log(id);
-    console.log(modalVisibleId);
+    // console.log(id);
+    // console.log(modalVisibleId);
 
     return (
         // 모달이 열릴때 openModal 클래스가 생성된다.

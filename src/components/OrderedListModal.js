@@ -13,13 +13,13 @@ const DummyIframe = styled.iframe`
 
 const OrderedListModal = (order) => {
     /* 테스트 */
-    console.log('OLMODAL RENDERING...')
-    console.log(order.order);
+    // console.log('OLMODAL RENDERING...')
+    // console.log(order.order);
 
     const orderDetail = order.order;
     const dinnerDetail = orderDetail.dinners[0];
 
-    console.log(orderDetail.dinners[0]);
+    // console.log(orderDetail.dinners[0]);
 
     return (
         <ModalBlock height='auto' flex_direction='column' overflow='auto'>

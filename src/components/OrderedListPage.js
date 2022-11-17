@@ -1,13 +1,124 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCookies } from 'react-cookie';
-import { backEndUrl } from '../configs';
-import { parseToken } from "./Utils";
 import axios from "axios";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import { GiMeat } from 'react-icons/gi';
+
+import { backEndUrl } from '../configs';
+import { parseToken } from "./Utils";
 import Modal2 from './Modal2';
 import OrderedListModal from './OrderedListModal';
+import styled from 'styled-components'
+
+const OLP = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+`;
+
+const OLPLink = styled(Link)`
+    color: #964b00;
+    margin-top: 1em;
+    margin-right: 26em;
+    text-decoration: none;
+`;
+
+const OLPHeader = styled.h1`
+    font-weight: 1000;
+    margin-top: 0.1em;
+`;
+
+const OLPForm = styled.div`
+    height: 45em;
+    overflow: auto;
+`;
+
+const OLPContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.5em;
+    border: 1px solid #c0c0c0;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    width: 30em;
+    height: 15em;
+`;
+
+const OLPTop = styled.div`
+    display: flex;
+    justify-content: space-between;
+    color: grey;
+`;
+
+const OLPTopLeft = styled.div`
+    display: flex;
+
+`;
+
+const OLPTopLeftTime = styled.div`
+    margin-right: 0.1em;
+
+`;
+
+const OLPTopLeftState = styled.div`
+    margin-left: 0.25em;
+
+`;
+
+const OLPTopRight = styled.div`
+    margin-right: 0.1em;
+
+`;
+
+const OLPTopRightBtn = styled.button`
+    border: 0.5px solid white;
+    border-radius: 5%;
+    color: white;
+    background-color: #964b00;
+    box-shadow: 3px 3px 3px #c0c0c0;
+`;
+
+const OLPMiddle = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
+const OLPMiddleTxt = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+`;
+
+const OLPMIddleTxtMain = styled.div`
+    width: 8em;
+    font-weight: bold;
+    font-size: 1.5em;
+`;
+
+const OLPMiddleTxtExtra = styled.div`
+    margin-top: 1em;
+    font-size: 0.6em;
+`;
+
+const OLPBottom = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
+const OLPReorderBtn = styled.button`
+    border: 0.5px solid white;
+    width: 20em;
+    height: 4em;
+    font-weight: bold;
+    color: white;
+    background-color: #964009;
+    box-shadow: 3px 6px 3px #c0c0c0;
+`;
 
 const OrderedListPage = () => {
     // console.log("ORDERPAGE IS RENDERING...")
@@ -93,7 +204,7 @@ const OrderedListPage = () => {
 
     const openModal = () => { setModalOpen(true) };
     const closeModal = () => { setModalOpen(false) };
-    const onModalHandler = id => {
+    const onModalHandler = (id) => {
         setModalVisibleId(id)
     }
 
@@ -102,194 +213,69 @@ const OrderedListPage = () => {
     }, []);
 
     // 주문내역 출력
-    // console.log(orders); 
+    // console.log(orders);
 
     if (loading) return <div>로딩중...</div>;
     if (error) return <div>에러가 발생했습니다.</div>;
     if (!orders) return null;
 
     return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "center",
-
-            width: '100%',
-            height: "100vh",
-        }}>
-            <Link style={{
-                color: '#964b00',
-
-                marginTop: '1em',
-                marginRight: '26em',
-
-                textDecoration: 'none',
-
-                // ...(hover ? {
-                //     color: '#bc5e00',
-                // } : null)
-            }}
-                to="/dinner"
-            // onMouseEnter={() => {
-            //     setHover(true);
-            // }}
-            // onMouseLeave={() => {
-            //     setHover(false);
-            // }}
-            >돌아가기
-            </Link>
-            <h1 style={{
-                fontWeight: 1000,
-
-                marginTop: '0.1em',
-            }}>MR.{user.name}님의 주문목록</h1>
-            <div style={{
-                height: '45em',
-
-                overflow: 'auto',
-            }}>
-                {orders.map((order) => (
-                    // 한 컨테이너
-                    <container style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        padding: '0.5em',
-
-                        border: '1px solid #c0c0c0',
-                        marginTop: '0.5em',
-                        marginBottom: '0.5em',
-
-                        width: '30em',
-                        height: '15em',
-                    }}>
-                        {/* header 부분 */}
-                        <wrapper className='header' style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-
-                            color: 'grey',
-                        }}>
-                            <wrapper className='header-left' style={{
-                                display: 'flex',
-                            }}>
-                                <div style={{
-                                    marginRight: '0.1em',
-                                }}>
-                                    <p>{`${order.deliveredTime} · `}</p>
-                                </div>
-                                <div style={{
-                                    marginLeft: '0.25em',
-                                }}>
-                                    <p>{order.state ?
-                                        '배달 완료'
-                                        : '배달 중'
-                                    }</p>
-                                </div>
-                            </wrapper>
-                            <div className='header-right' style={{
-                                marginRight: '0.1em',
-                            }}>
-                                <button style={{
-                                    border: '0.5px solid white',
-                                    borderRadius: '5%',
-
-                                    color: 'white',
-                                    backgroundColor: '#964b00',
-
-                                    boxShadow: '3px 3px 3px #c0c0c0',
-
-                                    // ...(hover ? {
-                                    //     backgroundColor: '#bc5e00',
-                                    // } : null)
-                                }}
-                                    // onMouseEnter={() => {
-                                    //     setHover(true);
-                                    // }}
-                                    // onMouseLeave={() => {
-                                    //     setHover(false);
-                                    // }}
-                                    onClick={() => onModalHandler(order.orderNum)}
-                                // onClick={openModal}
-                                >
-                                    주문상세
-                                </button>
-                                <Modal2 header={order.orderNum} id={order.orderNum} modalVisibleId={modalVisibleId}
-                                    setModalVisibleId={setModalVisibleId}>
-                                    <OrderedListModal order={order} />
-                                </Modal2>
-                            </div>
-                        </wrapper>
-                        {/* body 부분 */}
-                        < wrapper className='body' style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                        }}>
-
-                            <GiMeat size='7em' style={{
-                                border: '0.5px solid #c0c0c0',
-
-                                marginRight: '1em',
-                            }} />
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'space-evenly',
-
-                            }}>
-                                <div style={{
-                                    width: '8em',
-
-                                    fontWeight: 'bold',
-                                    fontSize: '1.5em',
-                                }}>
-                                    {order.dinners[0].name}
-                                </div>
-                                <div>
-                                    {order.style.content}
-                                </div>
-                            </div>
-                        </wrapper>
-                        {/* tail 부분 */}
-                        <wrapper className='tail' style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                        }}>
-                            <button style={{
-                                border: '0.5px solid white',
-
-                                width: '20em',
-                                height: '4em',
-
-                                fontWeight: 'bold',
-                                color: 'white',
-                                backgroundColor: '#964b00',
-
-                                boxShadow: '3px 6px 3px #c0c0c0',
-
-                                // ...(hover ? {
-                                //     backgroundColor: '#bc5e00',
-                                // } : null)
-                            }}
-                                onClick={submitHandler} id={order.orderNum}
-                            // onMouseEnter={() => {
-                            //     setHover(true);
-                            // }}
-                            // onMouseLeave={() => {
-                            //     setHover(false);
-                            // }}
-                            >
-                                재주문 하기
-                            </button>
-                        </wrapper>
-                    </container>
-                ))
-                }
-            </div >
-
-
-        </div >
+        <OLP>
+            <OLPLink to='/dinner'>돌아가기</OLPLink>
+            <OLPHeader>MR.{user.name}님의 주문목록</OLPHeader>
+            <OLPForm>{orders.map((order) => (
+                <OLPContainer>
+                    {/* header 부분 */}
+                    <OLPTop>
+                        <OLPTopLeft>
+                            <OLPTopLeftTime>
+                                <p>{
+                                    order.state === 'DE' ?
+                                        `${order.deliveredTime} ·`
+                                        : ''
+                                }</p>
+                            </OLPTopLeftTime>
+                            <OLPTopLeftState>
+                                <p>{
+                                    order.state === 'DE' ?
+                                        '배달완료'
+                                        : order.state === 'DS' ?
+                                            '배송중'
+                                            : order.state === 'CE' ?
+                                                '조리완료'
+                                                : order.state === 'CS' ?
+                                                    '조리시작'
+                                                    : '주문확인중'
+                                }</p>
+                            </OLPTopLeftState>
+                        </OLPTopLeft>
+                        <OLPTopRight>
+                            <OLPTopRightBtn onClick={() => onModalHandler(order.orderNum)}>주문상세</OLPTopRightBtn>
+                        </OLPTopRight>
+                        <Modal2 header={order.orderNum} id={order.orderNum} modalVisibleId={modalVisibleId}
+                            setModalVisibleId={setModalVisibleId}>
+                            <OrderedListModal order={order} />
+                        </Modal2>
+                    </OLPTop>
+                    {/* body 부분 */}
+                    <OLPMiddle>
+                        <GiMeat size='7em' style={{
+                            border: '0.5px solid #c0c0c0',
+                            marginRight: '1em',
+                        }} />
+                        <OLPMiddleTxt>
+                            <OLPMIddleTxtMain>{order.dinners[0].name}</OLPMIddleTxtMain>
+                            <OLPMiddleTxtExtra>{order.dinners[0].extraContent}</OLPMiddleTxtExtra>
+                        </OLPMiddleTxt>
+                    </OLPMiddle>
+                    {/* tail 부분 */}
+                    <OLPBottom>
+                        <OLPReorderBtn onClick={submitHandler} id={order.orderNum}>재주문 하기</OLPReorderBtn>
+                    </OLPBottom>
+                </OLPContainer>
+            ))
+            }</OLPForm>
+        </OLP>
     );
 }
 

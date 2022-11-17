@@ -6,10 +6,11 @@ import { parseToken } from "./Utils";
 import axios from "axios";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import { GiMeat } from 'react-icons/gi';
-import CustomerModal from "./CustomerModal";
+import Modal2 from './Modal2';
+import OrderedListModal from './OrderedListModal';
 
 const OrderedListPage = () => {
-    console.log("RENDERING...")
+    // console.log("ORDERPAGE IS RENDERING...")
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -17,11 +18,9 @@ const OrderedListPage = () => {
     const [cookies, ,] = useCookies(['token']);
     const navigate = useNavigate();
     const customerNum = parseToken(cookies.token).num;
-    const [hover, setHover] = useState(false);
+    // const [hover, setHover] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-
-    console.log(`caller: ${modalOpen}`);
-
+    const [modalVisibleId, setModalVisibleId] = useState("")
 
     // 재주문 버튼 클릭 시 이전 주문 정보 POST
     // 버튼 id를 주문 번호로 지정
@@ -86,7 +85,7 @@ const OrderedListPage = () => {
             setOrders(response.data.orders.reverse());
             // console.log(response.data);
         } catch (e) {
-            console.log(e);
+            console.log(e); // 에러 출력
             setError(e);
         }
         setLoading(false);
@@ -94,12 +93,16 @@ const OrderedListPage = () => {
 
     const openModal = () => { setModalOpen(true) };
     const closeModal = () => { setModalOpen(false) };
+    const onModalHandler = id => {
+        setModalVisibleId(id)
+    }
 
     useEffect(() => {
         fetchCustomers();
     }, []);
 
-    // console.log(orders);
+    // 주문내역 출력
+    // console.log(orders); 
 
     if (loading) return <div>로딩중...</div>;
     if (error) return <div>에러가 발생했습니다.</div>;
@@ -109,7 +112,7 @@ const OrderedListPage = () => {
         <div style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             alignItems: "center",
 
             width: '100%',
@@ -118,6 +121,7 @@ const OrderedListPage = () => {
             <Link style={{
                 color: '#964b00',
 
+                marginTop: '1em',
                 marginRight: '26em',
 
                 textDecoration: 'none',
@@ -140,144 +144,152 @@ const OrderedListPage = () => {
 
                 marginTop: '0.1em',
             }}>MR.{user.name}님의 주문목록</h1>
+            <div style={{
+                height: '45em',
 
-            {orders.map((order) => (
-                // 한 컨테이너
-                <container style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    padding: '0.5em',
-
-                    border: '1px solid #c0c0c0',
-                    marginTop: '0.5em',
-                    marginBottom: '0.5em',
-
-                    width: '30em',
-                    height: '15em',
-                }}>
-                    {/* header 부분 */}
-                    <wrapper className='header' style={{
+                overflow: 'auto',
+            }}>
+                {orders.map((order) => (
+                    // 한 컨테이너
+                    <container style={{
                         display: 'flex',
+                        flexDirection: 'column',
                         justifyContent: 'space-between',
+                        padding: '0.5em',
 
-                        color: 'grey',
+                        border: '1px solid #c0c0c0',
+                        marginTop: '0.5em',
+                        marginBottom: '0.5em',
+
+                        width: '30em',
+                        height: '15em',
                     }}>
-                        <wrapper className='header-left' style={{
+                        {/* header 부분 */}
+                        <wrapper className='header' style={{
                             display: 'flex',
+                            justifyContent: 'space-between',
+
+                            color: 'grey',
                         }}>
-                            <div style={{
+                            <wrapper className='header-left' style={{
+                                display: 'flex',
+                            }}>
+                                <div style={{
+                                    marginRight: '0.1em',
+                                }}>
+                                    <p>{`${order.deliveredTime} · `}</p>
+                                </div>
+                                <div style={{
+                                    marginLeft: '0.25em',
+                                }}>
+                                    <p>{order.state ?
+                                        '배달 완료'
+                                        : '배달 중'
+                                    }</p>
+                                </div>
+                            </wrapper>
+                            <div className='header-right' style={{
                                 marginRight: '0.1em',
                             }}>
-                                <p>{`${order.deliveredTime} · `}</p>
-                            </div>
-                            <div style={{
-                                marginLeft: '0.25em',
-                            }}>
-                                <p>{order.state ?
-                                    '배달 완료'
-                                    : '배달 중'
-                                }</p>
+                                <button style={{
+                                    border: '0.5px solid white',
+                                    borderRadius: '5%',
+
+                                    color: 'white',
+                                    backgroundColor: '#964b00',
+
+                                    boxShadow: '3px 3px 3px #c0c0c0',
+
+                                    // ...(hover ? {
+                                    //     backgroundColor: '#bc5e00',
+                                    // } : null)
+                                }}
+                                    // onMouseEnter={() => {
+                                    //     setHover(true);
+                                    // }}
+                                    // onMouseLeave={() => {
+                                    //     setHover(false);
+                                    // }}
+                                    onClick={() => onModalHandler(order.orderNum)}
+                                // onClick={openModal}
+                                >
+                                    주문상세
+                                </button>
+                                <Modal2 header={order.orderNum} id={order.orderNum} modalVisibleId={modalVisibleId}
+                                    setModalVisibleId={setModalVisibleId}>
+                                    <OrderedListModal order={order} />
+                                </Modal2>
                             </div>
                         </wrapper>
-                        <div className='header-right' style={{
-                            marginRight: '0.1em',
+                        {/* body 부분 */}
+                        < wrapper className='body' style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}>
+
+                            <GiMeat size='7em' style={{
+                                border: '0.5px solid #c0c0c0',
+
+                                marginRight: '1em',
+                            }} />
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-evenly',
+
+                            }}>
+                                <div style={{
+                                    width: '8em',
+
+                                    fontWeight: 'bold',
+                                    fontSize: '1.5em',
+                                }}>
+                                    {order.dinners[0].name}
+                                </div>
+                                <div>
+                                    {order.style.content}
+                                </div>
+                            </div>
+                        </wrapper>
+                        {/* tail 부분 */}
+                        <wrapper className='tail' style={{
+                            display: 'flex',
+                            justifyContent: 'center',
                         }}>
                             <button style={{
                                 border: '0.5px solid white',
-                                borderRadius: '5%',
 
+                                width: '20em',
+                                height: '4em',
+
+                                fontWeight: 'bold',
                                 color: 'white',
                                 backgroundColor: '#964b00',
 
-                                boxShadow: '3px 3px 3px #c0c0c0',
+                                boxShadow: '3px 6px 3px #c0c0c0',
 
                                 // ...(hover ? {
                                 //     backgroundColor: '#bc5e00',
                                 // } : null)
                             }}
-                                // onMouseEnter={() => {
-                                //     setHover(true);
-                                // }}
-                                // onMouseLeave={() => {
-                                //     setHover(false);
-                                // }}
-                                onClick={openModal}
+                                onClick={submitHandler} id={order.orderNum}
+                            // onMouseEnter={() => {
+                            //     setHover(true);
+                            // }}
+                            // onMouseLeave={() => {
+                            //     setHover(false);
+                            // }}
                             >
-                                주문상세
-                                <CustomerModal open={modalOpen} close={closeModal} />
+                                재주문 하기
                             </button>
-                            {/* <p>음식구성: </p>
-                            {order.foodCounts.map((f) => (
-                                <p key={f.food.foodNum}>{f.food.name}: {f.count}</p>
-                            ))}*/}
-                        </div>
-                    </wrapper>
-                    {/* body 부분 */}
-                    <wrapper className='body' style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}>
+                        </wrapper>
+                    </container>
+                ))
+                }
+            </div >
 
-                        <GiMeat size='7em' style={{
-                            border: '0.5px solid #c0c0c0',
 
-                            marginRight: '1em',
-                        }} />
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'space-evenly',
-
-                        }}>
-                            <div style={{
-                                width: '8em',
-
-                                fontWeight: 'bold',
-                                fontSize: '1.5em',
-                            }}>
-                                {order.dinners[0].name}
-                            </div>
-                            <div>
-                                {order.style.content}
-                            </div>
-                        </div>
-                    </wrapper>
-                    {/* tail 부분 */}
-                    <wrapper className='tail' style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}>
-                        <button style={{
-                            border: '0.5px solid white',
-
-                            width: '20em',
-                            height: '4em',
-
-                            fontWeight: 'bold',
-                            color: 'white',
-                            backgroundColor: '#964b00',
-
-                            boxShadow: '3px 6px 3px #c0c0c0',
-
-                            // ...(hover ? {
-                            //     backgroundColor: '#bc5e00',
-                            // } : null)
-                        }}
-                            onClick={submitHandler} id={order.orderNum}
-                        // onMouseEnter={() => {
-                        //     setHover(true);
-                        // }}
-                        // onMouseLeave={() => {
-                        //     setHover(false);
-                        // }}
-                        >
-                            재주문 하기
-                        </button>
-                    </wrapper>
-                </container>
-            ))}
-        </div>
+        </div >
     );
 }
 

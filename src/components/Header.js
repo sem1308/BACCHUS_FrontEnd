@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -27,19 +27,6 @@ const Logo = styled.h1`
     display: inline-block;
     margin-top: 7px;
     line-height: 0;
-`;
-
-const LogoBox = styled.a`
-    display: inline-block;
-`;
-
-const LogoImgButton = styled.button`
-    position: absolute;
-    top: 25px;
-    left: 0px;
-    z-index: 300;
-    border: 0;
-    background: none;
 `;
 
 const LogoImgBox = styled.img`
@@ -101,7 +88,7 @@ function Header({ type }) {
         <HeaderBlock>
             <HeaderBox>
                 <Logo>
-                    <Link to={"/dinner" + type}>
+                    <Link to={"/" + type}>
                         <LogoTextImgBox src='/logos/logo_img.PNG'></LogoTextImgBox>
                         <LogoTextBox>"Mr. Dinner"</LogoTextBox>
                     </Link>

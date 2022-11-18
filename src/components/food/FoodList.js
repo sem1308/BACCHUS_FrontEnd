@@ -48,6 +48,7 @@ function FoodList() {
     }else if(e.target.name==='price' || e.target.name==='stock'){
       try{
         value = Number(e.target.value);
+        if(!value) value = 0;
       }catch(e){
         value = 0;
       }

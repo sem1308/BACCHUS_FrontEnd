@@ -83,9 +83,10 @@ function DinnerDetail({ dinnerNum }) {
     const registOrder = async () => {
       // 요청이 시작 할 때에는 error 와 foods 를 초기화하고
       setError(null);
+      const fc = await foodCounts.filter((foodCount)=>foodCount.count !== 0);
       await axios.post(
         backEndUrl + '/order', {
-        foodCountDTOs: foodCounts,
+        foodCountDTOs: fc,
         insertOrderDTO: {
           "dinnerNum": [dinner.dinnerNum],
           "customerNum": customer.num,
@@ -154,14 +155,15 @@ function DinnerDetail({ dinnerNum }) {
           await axios.get(
             backEndUrl + '/food'
           ).then(response => {
-            temp_Foods = response.data.map(food => (
-              {
+            temp_Foods = response.data.filter((food)=>food.state!=='SNA');
+            temp_Foods = temp_Foods.map(food => {
+              return {
                 foodNum: food.foodNum,
                 count: 0,
                 type: food.type,
                 name: food.name,
                 price: food.price
-              }))
+              }})
           });
           await axios.get(
             //'http://13.125.101.4:8080/dinner/'+dinnerNum
@@ -186,6 +188,7 @@ function DinnerDetail({ dinnerNum }) {
           await axios.get(
             backEndUrl + '/customer/' + cust.num
           ).then(response => {
+            console.log(response.data)
             setOrderInfo(order => ({
               ...order,
               address: response.data.address.split(","),

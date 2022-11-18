@@ -1,25 +1,22 @@
 import Header from '../../components/Header';
 import NavBar from '../../components/NavBar';
 import { DinnerBlock } from '../../components/Utils';
+import Working from '../../components/Working';
 
-function EmpWorkingPage ({which}) {
+function EmpWorkingPage () {
     const links = [
         {
-            'name':'음식',
-            'to' : '/food/employee'
-        },
-        {
-            'name':'디너',
-            'to' : '/dinner/employee'
-        },
+            'name':'주문 목록',
+            'to' : '/working/employee'
+        }
     ]
 
     return (
         <div>
             <Header type="employee"/>
             <DinnerBlock>
-                <NavBar links={links}></NavBar>
-
+                <NavBar links={links}/>
+                <Working/>
             </DinnerBlock>
         </div>
     )

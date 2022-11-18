@@ -58,11 +58,19 @@ const DinnerModal = ({imageSrc,dinner,submitHandler, isExist, setImageSrc,
           <Form.Label>이름</Form.Label>
           <Form.Control name="name" value={dinner.name} onChange={handleChange} placeholder="Enter name" />
         </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicStock">
-          <Form.Label>적정인원</Form.Label>
-          <Form.Control name="numPeople" value={dinner.numPeople} onChange={handleChange} placeholder="0" />
-        </Form.Group>
+        <ContentBlock className="mb-3" display='flex' justify_items='space-between'>
+          <Form.Group className="w-50 px-2" controlId="formBasicStock">
+            <Form.Label>적정인원</Form.Label>
+            <Form.Control name="numPeople" value={dinner.numPeople} onChange={handleChange} placeholder="0" />
+          </Form.Group>
+          <Form.Group className="w-50 px-2" controlId="formBasicState">
+            <Form.Label>상태</Form.Label>
+            <Form.Select name="state" value={dinner.state} onChange={handleChange} aria-label="Default select example">
+              <option value="SA">판매중</option>
+              <option value="SNA">판매 중지</option>
+            </Form.Select>        
+          </Form.Group>
+        </ContentBlock>
         <Form.Group className="mb-3" controlId="formBasicContent">
           <Form.Label>설명</Form.Label>
           <Form.Control as='textarea' rows={5} name="extraContent" value={dinner.extraContent} onChange={handleChange} placeholder="Enter Content" />
@@ -77,9 +85,10 @@ const DinnerModal = ({imageSrc,dinner,submitHandler, isExist, setImageSrc,
             return(
               <ContentBlock width='70%' display='flex' flex_direction='row' key={Number(foodCount.foodNum)} className='mb-3'>
                 <ContentBlock fs='14px' margin='0px 20px 10px 0' width='30%'>{foods[findIndex].name}</ContentBlock> 
-                <ContentBlock width='70%'>
-                  <Form.Control className='w-50' id={Number(foodCount.foodNum)} name="count" value={foodCount.count} onChange={handleFoodCountChange} placeholder="개수 입력" />
+                <ContentBlock width='20%'>
+                  <Form.Control className='w-100' id={Number(foodCount.foodNum)} name="count" value={foodCount.count} onChange={handleFoodCountChange} placeholder="개수 입력" />
                 </ContentBlock>
+                {foods[findIndex].state === 'SNA' ? <ContentBlock margin='0 0 0 20px' color='red' width='20%'>판매 불가</ContentBlock> : ''}
               </ContentBlock>
             )
           })}

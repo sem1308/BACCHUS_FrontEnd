@@ -6,11 +6,14 @@ import { Route, Routes } from 'react-router-dom';
 import DinnerPage from './pages/customer/DinnerPage';
 import DinnerDetailPage from './pages/customer/DinnerDetailPage';
 import EmpHomePage from './pages/employee/EmpHomePage';
+import EmpWorkingPage from './pages/employee/EmpWorkingPage';
 import EmpManagePage from './pages/employee/EmpManagePage';
+import HomePage from './pages/customer/HomePage';
 
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<HomePage />} />
       <Route path="/dinner" element={<DinnerPage />} />
       <Route path="/dinner/:dinnerNum" element={<DinnerDetailPage />} />
       <Route path="/ordered_list" element={<OrderedListPage />} />
@@ -20,6 +23,7 @@ function App() {
 
       <Route path="/login/employee" element={<LoginPage type='employee' />} />
       <Route path="/employee" element={<EmpHomePage />} />
+      <Route path="/working/employee" element={<EmpWorkingPage />} />
       <Route path="/food/employee" element={<EmpManagePage which='food' />} />
       <Route path="/dinner/employee" element={<EmpManagePage which='dinner' />} />
     </Routes>

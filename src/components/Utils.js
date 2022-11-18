@@ -5,6 +5,35 @@ export const Span = styled.span`
   font-size : ${props => props.fs || '16px'};
 `;
 
+/* 홈 */
+export const HomeBlock = styled.div`
+    width: 1220px;
+    padding-top: 230px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+`;
+
+export const LinkBlock = styled.div`
+    position: relative;
+    text-decoration: none;
+    color : black;
+    cursor: pointer;
+    width: 500px;
+    height : 500px;
+    font-size: 40px;
+    border-radius: 10%;
+    border : rgba(158, 125, 90,0.5);
+    margin: 55px auto 0;
+    box-shadow : 0 0 10px 0px rgba(158, 125, 90,0.7);
+
+    &:hover{
+        color : black;
+        box-shadow : 0 0 20px 0px rgba(158, 125, 90,1);
+    }
+`;
+
 /* 기본 컨텐트 */
 export const ContentBlock = styled.div`
   position: ${props => props.position || 'relative'};

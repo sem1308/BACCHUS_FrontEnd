@@ -9,6 +9,7 @@ import { Form } from "react-bootstrap";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import moment from 'moment';
 import { Steps, Button } from 'antd';
+import { useParams } from "react-router-dom";
 
 const stateFlow = {
   'OS':[0,'주문 등록'],
@@ -18,7 +19,11 @@ const stateFlow = {
   'DE':[4,'배달 완료']
 };
 
-const stateFlowArray = ['OS','CS','CE','DS','DE'];
+const stateWholeIdx = 0;
+
+const stateCheckArrays = [['OS','CS','CE','DS','DE'],
+                          ['OS','CS','CE','DS'],
+                          ['DE']];
 
 const items = Object.entries(stateFlow).map((state,i)=>{
   return {
@@ -27,6 +32,8 @@ const items = Object.entries(stateFlow).map((state,i)=>{
 );
 
 const Working = () => {
+  let { stateType } = useParams();
+  const stateCheckArray = stateCheckArrays[useParams().stateType];
   const [orders,setOrders] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -39,7 +46,9 @@ const Working = () => {
       backEndUrl+'/order'
     )
     .then((res)=>{
-      setOrders(res.data);
+      setOrders(res.data.filter((order)=>
+        stateCheckArray.includes(order.state)
+      ));
     }).catch((error)=>{
       console.log(error)
       setError(error);
@@ -49,10 +58,10 @@ const Working = () => {
 
   useEffect(()=>{  
     fetchOrders();
-  },[]);
+  },[stateType]);
 
   const handleChange = async (id, val) => {
-    const value = stateFlowArray[val];
+    const value = stateCheckArrays[stateWholeIdx][val];
     const findIndex = orders.findIndex(element => element.orderNum === Number(id));
     const order = orders[findIndex];
     Swal.fire({
@@ -112,7 +121,6 @@ const Working = () => {
         })
         fetchOrders()
       } else {
-        console.log(value);
         Swal.fire({
           title: '상태 변경이 취소되었습니다.',
           confirmButtonText: '확인',
@@ -126,7 +134,7 @@ const Working = () => {
   if (!orders) return null;
 
   return(
-    <ContentBlock>
+    <ContentBlock margin='0 0 50px 0'>
       <Row xs={4} md={3} className="g-4">
         {orders.map(order => {
           const stateIdx = stateFlow[order.state][0]+1;
@@ -171,16 +179,13 @@ const Working = () => {
                       current={stateIdx}
                       items={items}
                     />    
-                      {stateIdx < stateFlowArray.length && (
+                      {stateIdx < stateCheckArrays[stateWholeIdx].length && (
                         <Button type="primary" onClick={()=>handleChange(order.orderNum, stateIdx)}>
-                          {stateFlow[stateFlowArray[stateIdx]][1]}
+                          {stateFlow[stateCheckArrays[stateWholeIdx][stateIdx]][1]}
                         </Button>
                       )}
                       {stateIdx > 1 && (
-                        <Button
-                          style={{
-                            margin: '0 8px',
-                          }}
+                        <Button style={{margin: '0 8px'}}
                           onClick={() => handleChange(order.orderNum, stateIdx-2)}
                         >
                           이전
@@ -197,6 +202,10 @@ const Working = () => {
       </Row>
     </ContentBlock>
   );
+}
+
+Working.defaultProps = {
+  checkState: ''
 }
 
 export default Working;

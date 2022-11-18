@@ -6,8 +6,16 @@ import Working from '../../components/Working';
 function EmpWorkingPage () {
     const links = [
         {
-            'name':'주문 목록',
-            'to' : '/working/employee'
+            'name':'배달 미완료',
+            'to' : '/working/employee/1'
+        },
+        {
+            'name':'배달 완료',
+            'to' : '/working/employee/2'
+        },        
+        {
+            'name':'전체 주문 목록',
+            'to' : '/working/employee/0'
         }
     ]
 

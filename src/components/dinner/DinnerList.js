@@ -176,11 +176,11 @@ function DinnerList({IsEmployee}) {
 
           return <Col key={dinner.dinnerNum}>
               <Card>
-                {state==='SA' ? 
+                {state==='SA'&& !IsEmployee ? 
                 <Link to={`/dinner/${dinner.dinnerNum}`}>
                   <CardImgBox alt="" variant='top' className="card-img" src={`/imgs/dinners/${dinner.name}.jpeg`}></CardImgBox>
                 </Link> 
-                :<ContentBlock opacity='0.5'>
+                :<ContentBlock opacity={state==='SA' ? '1' : '0.5'}>
                   <CardImgBox alt="" variant='top' className="card-img" src={`/imgs/dinners/${dinner.name}.jpeg`}></CardImgBox>
                 </ContentBlock>}
                 <Card.Body>

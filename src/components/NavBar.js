@@ -1,6 +1,7 @@
 import { css } from 'styled-components';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const NavBarBlock = styled.nav`
     display: block;
@@ -23,13 +24,13 @@ const NavBarListBox = styled.ul`
 const NavBarContent = styled.li`
     float: left;
     border: 1px solid #decdb9;
-    &:last-child{  
-        border-left:none;
+    border-left:none;
+    &:first-child{  
+        border-left:1px solid #decdb9;
     }
 `;
 
 const NavBarContentLink = styled.span`
-    border-bottom-color: #fff;
     display: block;
     width: 130px;
     height: 50px;
@@ -43,7 +44,7 @@ const NavBarContentLink = styled.span`
             css`
           color: #8B4513;
           font-weight: bold;
-          box-shadow : 0 2px 1px 0 #fff;
+          box-shadow : 0 2px 0px 0 #fff;
           border : 1px solid #A0522D;
           border-bottom-color: #fff;
         ` :
@@ -57,6 +58,7 @@ const NavBarContentLink = styled.span`
 `;
 
 function NavBar({ links }) {
+    useParams();
     const isActive = (path) => {
         return window.location.pathname.startsWith(path);
     }

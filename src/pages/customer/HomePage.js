@@ -1,6 +1,9 @@
 import Header from '../../components/Header';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { ShoppingCartOutlined } from '@mui/icons-material';
+import { TagFacesOutlined } from '@mui/icons-material';
+import { MenuOutlined } from '@mui/icons-material';
 
 const HomeBlock = styled.div`
     width: 1220px;
@@ -19,13 +22,14 @@ const LinkBlock = styled.div`
     width: 500px;
     height : 500px;
     font-size: 40px;
-    background-color: rgba(227,214,165,0.8);
     border-radius: 10%;
+    border : rgba(158, 125, 90,0.5);
     margin: 55px auto 0;
+    box-shadow : 0 0 10px 0px rgba(158, 125, 90,0.7);
 
     &:hover{
         color : black;
-        background-color: rgba(227,214,165,1);
+        box-shadow : 0 0 20px 0px rgba(158, 125, 90,1);
     }
 `;
 
@@ -35,10 +39,16 @@ function HomePage () {
             <Header/>
             <HomeBlock>
                 <LinkBlock>
-                    <Link className='link' to="/dinner">디너 주문</Link>
+                    <Link className='link' to="/dinner">
+                        <ShoppingCartOutlined style={{ fontSize: '48px', marginRight:'12px'}}/>
+                        디너 주문
+                    </Link>
                 </LinkBlock>
                 <LinkBlock>
-                    <Link className='link' to={`/ordered_list`}>주문 목록</Link>
+                    <Link className='link' to={`/ordered_list`}>
+                        <MenuOutlined style={{ fontSize: '48px', marginRight:'12px'}}/>
+                        주문 목록
+                    </Link>
                 </LinkBlock>
             </HomeBlock>
         </div>

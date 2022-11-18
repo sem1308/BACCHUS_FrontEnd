@@ -12,8 +12,8 @@ const TD = styled.td`
 
 const FoodTable = ({foods, openModal}) => {
   const stateToWord = {
-    "SA" : "판매 가능" ,
-    "SNA" : "판매 불가"
+    "SA" : "판매중" ,
+    "SNA" : "판매 중지"
   };
 
   return(
@@ -29,7 +29,7 @@ const FoodTable = ({foods, openModal}) => {
         </tr>
       </thead>
       {foods.map(food => (
-        <tr>
+        <tr key = {food.foodNum} style={food.state==='SA' ? {opacity:1} : {opacity:0.5}}>
           <td><ImgBox><Img height='30px' src={'/imgs/foods/'+food.type+'.PNG'}/></ImgBox></td>
           <TD>{food.name}</TD>
           <TD>{food.price}</TD>

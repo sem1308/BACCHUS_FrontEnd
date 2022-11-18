@@ -6,14 +6,14 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Modal from '../Modal';
 import { backEndUrl } from '../../configs';
-import { CardImgBox, CardTextBox, ButtonBlock, Btn} from '../Utils';
+import { CardImgBox, CardTextBox, ButtonBlock, Btn, ContentBlock} from '../Utils';
 import DinnerModal from './DinnerModal';
-
 
 const DinnerInit = {
   "name": "",
   "extraContent": "",
-  "numPeople": 0
+  "numPeople": 0,
+  "state" : "SA"
 }
 
 function DinnerList({IsEmployee}) {
@@ -62,7 +62,8 @@ function DinnerList({IsEmployee}) {
         "dinnerNum" : dinner.dinnerNum,
         "name": dinner.name,
         "extraContent": dinner.extraContent,
-        "numPeople": dinner.numPeople
+        "numPeople": dinner.numPeople,
+        "state" : dinner.state
       });
       setIsExist(true);
     }else{
@@ -132,23 +133,21 @@ function DinnerList({IsEmployee}) {
       setLoading(true);
       
       await axios.get(
-        //'http://13.125.101.4:8080/dinner'
         backEndUrl+'/food'
       ).then(response=>{
         setFoods(response.data) // 데이터는 response.data 안에 들어있습니다.
         setFoodCounts(
-          response.data.map(food=>(
-            {
+          response.data.map(food=>{            
+            return {
               foodDinnerCountNum : -1,
               foodNum : food.foodNum,
               count : 0,
               type : food.type
-            }))
+            }})
         )   
       });
 
       await axios.get(
-        //'http://13.125.101.4:8080/dinner'
         backEndUrl+'/dinner'
       ).then(response=>
         setDinners(response.data) // 데이터는 response.data 안에 들어있습니다.
@@ -171,12 +170,19 @@ function DinnerList({IsEmployee}) {
   return (
     <div>
       <Row xs={4} md={4} className="g-4">
-        {dinners.map(dinner => (
-          <Col key={dinner.dinnerNum}>
+        {dinners.map(dinner => {
+          const state = dinner.state;
+          if(!IsEmployee && state==='SNA') return;
+
+          return <Col key={dinner.dinnerNum}>
               <Card>
+                {state==='SA' ? 
                 <Link to={`/dinner/${dinner.dinnerNum}`}>
                   <CardImgBox alt="" variant='top' className="card-img" src={`/imgs/dinners/${dinner.name}.jpeg`}></CardImgBox>
-                </Link>
+                </Link> 
+                :<ContentBlock opacity='0.5'>
+                  <CardImgBox alt="" variant='top' className="card-img" src={`/imgs/dinners/${dinner.name}.jpeg`}></CardImgBox>
+                </ContentBlock>}
                 <Card.Body>
                     <Card.Title>{dinner.name}</Card.Title>
                     <CardTextBox>
@@ -193,7 +199,8 @@ function DinnerList({IsEmployee}) {
                 : ''
               }
           </Col>
-        ))}
+          }
+        )}
       </Row>
       {
         IsEmployee ?

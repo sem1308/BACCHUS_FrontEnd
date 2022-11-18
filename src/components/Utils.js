@@ -15,8 +15,16 @@ export const ContentBlock = styled.div`
   width: ${props => props.width || 'auto'};
   height: ${props => props.height || 'auto'};
   align-items : ${props => props.align_items || 'center'};
+  text-align : ${props => props.text_align || 'start'};
   justify-items : ${props => props.justify_items || 'center'};
+  justify_content : ${props => props.justify_content || 'flex-start'};
   font-size : ${props => props.fs || 'auto'};
+  font-weight : ${props => props.fw || '400'};
+  opacity : ${props => props.opacity || '1'};
+  color : ${props => props.color || 'black'};
+  background-color: ${props => props.bg || 'none'};
+  overflow: ${props => props.overflow || 'none'};
+  border-bottom : ${props => props.border_bottom || 'none'};
 `
 
 export const DinnerBlock = styled.div`

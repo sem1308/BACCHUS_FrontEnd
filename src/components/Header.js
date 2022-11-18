@@ -111,11 +111,16 @@ function Header({ type }) {
                                     </div>
                                     :
                                     <div>
-                                        <Link to={`/ordered_list/${cookies.customerNum}`}>
-                                            <UserButton>과거 주문내역 조회</UserButton>
-                                        </Link>
+                                        {
+                                            type === '' ?
+                                                <Link to={`/ordered_list`}>
+                                                    <UserButton>주문내역 조회</UserButton>
+                                                </Link>
+                                                :
+                                                ''
+                                        }
                                         <UserButton onClick={() => {
-                                            removeCookie('token',{path:'/'});  // 로그인 했을 때 등록했던 쿠키 해제
+                                            removeCookie('token', { path: '/' });  // 로그인 했을 때 등록했던 쿠키 해제
                                             alert('로그아웃 되었습니다.');
                                         }}>로그아웃</UserButton>
                                     </div>

@@ -1,15 +1,18 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCookies } from 'react-cookie';
 import axios from "axios";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import { GiMeat } from 'react-icons/gi';
-
+import moment from 'moment';
 import { backEndUrl } from '../configs';
-import { parseToken } from "./Utils";
-import Modal2 from './Modal2';
-import OrderedListModal from './OrderedListModal';
+import { parseToken } from "../components/Utils";
+import Modal2 from '../components/Modal2';
+import OrderedListModal from '../components/OrderedListModal';
 import styled from 'styled-components'
+import Header from "../components/Header";
+import { Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 
 const OLP = styled.div`
     display: flex;
@@ -18,23 +21,20 @@ const OLP = styled.div`
     align-items: center;
     width: 100%;
     height: 100vh;
-`;
-
-const OLPLink = styled(Link)`
-    color: #964b00;
-    margin-top: 1em;
-    margin-right: 26em;
-    text-decoration: none;
+    padding : 100px 400px;
 `;
 
 const OLPHeader = styled.h1`
     font-weight: 1000;
-    margin-top: 0.1em;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
 `;
 
 const OLPForm = styled.div`
+    margin-top:20px;
     height: 45em;
-    overflow: auto;
+    overflow:auto;
+    overflow-x: hidden
 `;
 
 const OLPContainer = styled.div`
@@ -43,9 +43,8 @@ const OLPContainer = styled.div`
     justify-content: space-between;
     padding: 0.5em;
     border: 1px solid #c0c0c0;
-    margin-top: 0.5em;
+    margin-top: 1em;
     margin-bottom: 0.5em;
-    width: 30em;
     height: 15em;
 `;
 
@@ -221,60 +220,67 @@ const OrderedListPage = () => {
 
     return (
         <OLP>
-            <OLPLink to='/dinner'>돌아가기</OLPLink>
+            <Header></Header>
             <OLPHeader>MR.{user.name}님의 주문목록</OLPHeader>
-            <OLPForm>{orders.map((order) => (
-                <OLPContainer>
-                    {/* header 부분 */}
-                    <OLPTop>
-                        <OLPTopLeft>
-                            <OLPTopLeftTime>
-                                <p>{
-                                    order.state === 'DE' ?
-                                        `${order.deliveredTime} ·`
-                                        : ''
-                                }</p>
-                            </OLPTopLeftTime>
-                            <OLPTopLeftState>
-                                <p>{
-                                    order.state === 'DE' ?
-                                        '배달완료'
-                                        : order.state === 'DS' ?
-                                            '배송중'
-                                            : order.state === 'CE' ?
-                                                '조리완료'
-                                                : order.state === 'CS' ?
-                                                    '조리시작'
-                                                    : '주문확인중'
-                                }</p>
-                            </OLPTopLeftState>
-                        </OLPTopLeft>
-                        <OLPTopRight>
-                            <OLPTopRightBtn onClick={() => onModalHandler(order.orderNum)}>주문상세</OLPTopRightBtn>
-                        </OLPTopRight>
-                        <Modal2 header={order.orderNum} id={order.orderNum} modalVisibleId={modalVisibleId}
-                            setModalVisibleId={setModalVisibleId}>
-                            <OrderedListModal order={order} />
-                        </Modal2>
-                    </OLPTop>
-                    {/* body 부분 */}
-                    <OLPMiddle>
-                        <GiMeat size='7em' style={{
-                            border: '0.5px solid #c0c0c0',
-                            marginRight: '1em',
-                        }} />
-                        <OLPMiddleTxt>
-                            <OLPMIddleTxtMain>{order.dinners[0].name}</OLPMIddleTxtMain>
-                            <OLPMiddleTxtExtra>{order.dinners[0].extraContent}</OLPMiddleTxtExtra>
-                        </OLPMiddleTxt>
-                    </OLPMiddle>
-                    {/* tail 부분 */}
-                    <OLPBottom>
-                        <OLPReorderBtn onClick={submitHandler} id={order.orderNum}>재주문 하기</OLPReorderBtn>
-                    </OLPBottom>
-                </OLPContainer>
-            ))
-            }</OLPForm>
+            <OLPForm>
+                <Row xs={4} md={2} className="g-4">
+                    {orders.map((order) => (
+                    <Col>
+                        <OLPContainer>
+                            {/* header 부분 */}
+                            <OLPTop>
+                                <OLPTopLeft>                            
+                                    <OLPTopLeftState>
+                                        <pre>{
+                                            order.state === 'DE' ?
+                                                '배달완료 · '
+                                                : order.state === 'DS' ?
+                                                    '배송중'
+                                                    : order.state === 'CE' ?
+                                                        '조리완료'
+                                                        : order.state === 'CS' ?
+                                                            '조리시작'
+                                                            : '주문확인중'
+                                        }</pre>
+                                    </OLPTopLeftState>
+                                    <OLPTopLeftTime>
+                                        <pre>{
+                                            order.state === 'DE' ?
+                                                moment(new Date(order.deliveredTime)).format("MM-DD HH:mm")
+                                                : ''
+                                        }</pre>
+                                    </OLPTopLeftTime>
+                                </OLPTopLeft>
+                                <OLPTopRight>
+                                    <OLPTopRightBtn onClick={() => onModalHandler(order.orderNum)}>주문상세</OLPTopRightBtn>
+                                </OLPTopRight>
+                                <Modal2 header={order.orderNum} id={order.orderNum} modalVisibleId={modalVisibleId}
+                                    setModalVisibleId={setModalVisibleId}>
+                                    <OrderedListModal order={order} />
+                                </Modal2>
+                            </OLPTop>
+                            {/* body 부분 */}
+                            <OLPMiddle>
+                                <GiMeat size='7em' style={{
+                                    border: '0.5px solid #c0c0c0',
+                                    marginRight: '1em',
+                                }} />
+                                {order.orderDinners.map(orderDinner=>{
+                                    console.log(orderDinner)
+                                return(<OLPMiddleTxt key={orderDinner.dinner.dinnerNum}>
+                                    <OLPMIddleTxtMain>{orderDinner.dinner.name}</OLPMIddleTxtMain>
+                                    <OLPMiddleTxtExtra>{orderDinner.dinner.extraContent}</OLPMiddleTxtExtra>
+                                </OLPMiddleTxt>)})}
+                            </OLPMiddle>
+                            {/* tail 부분 */}
+                            <OLPBottom>
+                                <OLPReorderBtn onClick={submitHandler} id={order.orderNum}>재주문 하기</OLPReorderBtn>
+                            </OLPBottom>
+                        </OLPContainer>
+                    </Col>
+                ))}
+                </Row>
+            </OLPForm>
         </OLP>
     );
 }

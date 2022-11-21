@@ -53,7 +53,7 @@ function DinnerList({IsEmployee}) {
         if(findIndex !== -1) {
           copyArray[findIndex] = {...copyArray[findIndex], 
             count: foodCount.count, 
-            foodDinnerCountNum : foodCount.foodDinnerCountNum};
+            dinnerFoodCountNum : foodCount.dinnerFoodCountNum};
         }
       })
       console.log(copyArray)
@@ -139,7 +139,7 @@ function DinnerList({IsEmployee}) {
         setFoodCounts(
           response.data.map(food=>{            
             return {
-              foodDinnerCountNum : -1,
+              dinnerFoodCountNum : -1,
               foodNum : food.foodNum,
               count : 0,
               type : food.type

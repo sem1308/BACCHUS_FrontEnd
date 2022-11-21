@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import React, { useState } from 'react';
 import axios from 'axios';
-import { CustomerDiv, CustomerForm, CustomerLink, CustomerHeader, CustomerInput, CustomerButton } from './Utils';
-
+import { CustomerDiv, CustomerForm, CustomerLink, CustomerHeader, CustomerInput, CustomerButton } from '../components/Utils';
+import Header from '../components/Header';
 
 function LoginPage({ type }) {
     const [Id, setId] = useState("");
@@ -52,18 +52,17 @@ function LoginPage({ type }) {
 
     return (
         <CustomerDiv>
+            <Header type={type}></Header>
             <CustomerForm onSubmit={onSubmitHandler}>
                 <CustomerHeader>
-                    <CustomerLink to={`/dinner`}>
-                        돌아가기
-                    </CustomerLink>
                     <h1 style={{
                         textAlign: 'center',
                         fontWeight: 1000,
+                        padding : '0 0 20px 0'
                     }}>MR.DINNER</h1>
                 </CustomerHeader>
-                <CustomerInput type='id' value={Id} onChange={onIdHandler} placeholder="아이디" />
-                <CustomerInput type='password' value={Password} onChange={onPasswordHandler} placeholder="비밀번호" />
+                <CustomerInput type='id' w='100%' value={Id} onChange={onIdHandler} placeholder="아이디" />
+                <CustomerInput type='password' w='100%' value={Password} onChange={onPasswordHandler} placeholder="비밀번호" />
                 <br />
                 <CustomerButton>
                     로그인

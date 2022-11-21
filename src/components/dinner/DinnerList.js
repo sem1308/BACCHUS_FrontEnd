@@ -169,7 +169,7 @@ function DinnerList({IsEmployee}) {
   // 음식 내용 : foodNum, name, price, type
   return (
     <div>
-      <Row xs={4} md={4} className="g-4">
+      <Row xs={4} md={3} className="g-4">
         {dinners.map(dinner => {
           const state = dinner.state;
           if(!IsEmployee && state==='SNA') return;

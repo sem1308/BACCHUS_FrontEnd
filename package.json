@@ -14,7 +14,6 @@
     "antd": "^4.24.1",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.1",
-    "formik": "^2.2.9",
     "open-color": "^1.9.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
@@ -26,12 +25,12 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
+    "react-speech-kit": "^3.0.1",
     "sass": "^1.56.1",
     "scss": "^0.2.4",
     "styled-components": "^5.3.6",
     "sweetalert2": "^11.6.7",
-    "web-vitals": "^2.1.4",
-    "yup": "^0.32.11"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

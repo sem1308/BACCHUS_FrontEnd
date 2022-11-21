@@ -76,8 +76,20 @@ const Working = () => {
         let deliveredTime = null;
         switch(value){
           case 'CS':
-            for(let foodCount of order.foodCounts){
-              if(foodCount.food.stock - foodCount.count < 0){
+            let fcs = {}
+            for(let orderDinner of order.orderDinners){
+              for(let foodCount of orderDinner.foodCounts){
+                if(!fcs[foodCount.foodName]){
+                  fcs[foodCount.foodName] = {
+                    stock : foodCount.food.stock,
+                    count : 0
+                  }
+                }
+                fcs[foodCount.foodName].count += foodCount.count;
+              }
+            }
+            for(let fc of Object.entries(fcs)){
+              if(fc[1].stock - fc[1].count < 0){
                 const res = await Swal.fire({
                   title: '재고가 부족합니다.',
                   text : '요리를 시작하겠습니까?',
@@ -93,14 +105,16 @@ const Working = () => {
             break;
           case 'CE':
             // 요리 완료시 재고 감소
-            order.foodCounts.map((foodCount)=>{
-              axios.put(
-                backEndUrl+'/food/'+foodCount.food.foodNum,{
-                  "stock": foodCount.food.stock - foodCount.count,
-                  "price" : foodCount.food.price
-                }
-              )
-            })
+            order.orderDinners.map(async orderDinner=>
+              await orderDinner.foodCounts.map((foodCount)=>{
+                axios.put(
+                  backEndUrl+'/food/'+foodCount.food.foodNum,{
+                    "stock": foodCount.food.stock - foodCount.count,
+                    "price" : foodCount.food.price
+                  }
+                )
+              })
+            )
             break;
           case 'DE':
             deliveredTime = new Date();
@@ -145,13 +159,18 @@ const Working = () => {
                 border_bottom='1px solid #adb5bd'>{order.orderNum}</ContentBlock>
                 <Card.Body>
                   <ContentBlock height='235px' overflow='auto'>
-                  {order.dinners.map((dinner)=>
-                    <Card.Title key={dinner.dinnerNum} className="mb-4 fw-6">{dinner.name}</Card.Title>
-                  )}
-                  {order.foodCounts.map((foodCount)=>
-                    <Card.Text key={foodCount.foodOrderCountNum}>
-                      {foodCount.food.name} {foodCount.count}개 {(foodCount.food.price*foodCount.count).toLocaleString()}원
-                    </Card.Text>
+                  {order.orderDinners.map((orderDinner)=>
+                    <div key={orderDinner.dinner.dinnerNum}>
+                      <Card.Title className="mb-4 fw-6">{orderDinner.dinner.name}</Card.Title>
+                      {orderDinner.foodCounts.map((foodCount,i)=>
+                        <Card.Text key={orderDinner.dinner.dinnerNum + i}>
+                          {foodCount.foodName} {foodCount.count}개 {(foodCount.price*foodCount.count).toLocaleString()}원
+                        </Card.Text>
+                      )}
+                      <Card.Text>
+                        스타일 : {orderDinner.style.name} / {orderDinner.style.price.toLocaleString()}원
+                      </Card.Text>
+                    </div>
                   )}
                   </ContentBlock>
                   <hr></hr>
@@ -170,7 +189,7 @@ const Working = () => {
                   {order.state === 'DE' ? 
                   <Card.Text>
                     배달 완료 시간 : {moment(order.deliveredTime).format('MM-DD HH:mm')}
-                  </Card.Text> : ''}                  
+                  </Card.Text> : ''}         
                   <Form.Group className="mb-3" controlId="formBasicState">
                     <Form.Label className="mb-3">상태</Form.Label>
                     <Steps

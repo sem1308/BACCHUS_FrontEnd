@@ -18,7 +18,7 @@ const HeaderBlock = styled.header`
 
 const HeaderBox = styled.div`
     position: relative;
-    width: 1220px;
+    width: 950px;
     margin: 0 auto;
     text-align: center;
 `;

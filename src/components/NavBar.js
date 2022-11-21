@@ -1,12 +1,11 @@
 import { css } from 'styled-components';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
 
 const NavBarBlock = styled.nav`
     display: block;
     position: relative;
-    width: 1220px;
+    width: 100%;
     margin: 0 auto;
     margin-bottom: 30px;
     text-align: center;
@@ -60,7 +59,7 @@ const NavBarContentLink = styled.span`
 function NavBar({ links }) {
     useParams();
     const isActive = (path) => {
-        return window.location.pathname.startsWith(path);
+        return window.location.pathname === path;
     }
 
     return (

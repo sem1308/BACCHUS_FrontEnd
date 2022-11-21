@@ -5,6 +5,35 @@ export const Span = styled.span`
   font-size : ${props => props.fs || '16px'};
 `;
 
+/* 홈 */
+export const HomeBlock = styled.div`
+    width: 1000px;
+    padding-top: 230px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+`;
+
+export const LinkBlock = styled.div`
+    position: relative;
+    text-decoration: none;
+    color : black;
+    cursor: pointer;
+    width: 450px;
+    height : 450px;
+    font-size: 40px;
+    border-radius: 10%;
+    border : rgba(158, 125, 90,0.5);
+    margin: 55px auto 0;
+    box-shadow : 0 0 10px 0px rgba(158, 125, 90,0.7);
+
+    &:hover{
+        color : black;
+        box-shadow : 0 0 20px 0px rgba(158, 125, 90,1);
+    }
+`;
+
 /* 기본 컨텐트 */
 export const ContentBlock = styled.div`
   position: ${props => props.position || 'relative'};
@@ -29,9 +58,9 @@ export const ContentBlock = styled.div`
 
 export const DinnerBlock = styled.div`
     position: relative;
-    width: 1220px;
+    width: 1000px;
     padding-top: 130px;
-    margin: 55px auto 0;
+    margin: 55px auto;
     display: flex;
     flex-direction: column;
     align-content: space-between;
@@ -54,8 +83,8 @@ export const Pre = styled.pre`
 
 /* 카드 */
 export const CardImgBox = styled.img`
-  height:250px;
-  max-width: 300px;
+  height: 250px;
+  max-width: 400px;
 `;
 
 export const CardTextBox = styled.pre`
@@ -115,6 +144,8 @@ export const Btn = styled.button`
   }
 `
 
+
+/* JWT 토큰 */
 export const parseToken = (token) => {
   let base64Url = token.split('.')[1];
   let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

@@ -22,12 +22,18 @@ const OrderDinnerModal = (props) => {
             if (foodCount.count === 0) return;
             return (
               <ContentBlock width='auto' display='flex' flex_direction='row' key={Number(foodCount.foodNum)} className='mb-3'>
-                <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{foodCount.name}</ContentBlock>
+                <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{foodCount.foodName}</ContentBlock>
                 <ContentBlock fs='16px' margin='0px 5px 0 0' width='15%'>{foodCount.count}개</ContentBlock>
                 <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{(foodCount.price * foodCount.count).toLocaleString()}원</ContentBlock>
               </ContentBlock>
             )
           })}
+          <hr/>
+          <ContentBlock width='auto' display='flex' flex_direction='row' className='mb-3'>
+            <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>스타일</ContentBlock>
+            <ContentBlock fs='16px' margin='0px 5px 0 0' width='15%'>{props.styleToInfo[props.orderInfo.styleCode].name}</ContentBlock>
+            <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{props.styleToInfo[props.orderInfo.styleCode].price.toLocaleString()}원</ContentBlock>
+          </ContentBlock>
         </ContentBlock>
         <Pre text_align='end' mt='30px' fw='600' fs='20px'>총 금액 : {props.totalPrice.toLocaleString()}원</Pre>
         <Pre mb='20px' color='black' fw='600' fs='22px'>결제</Pre>

@@ -9,6 +9,7 @@ import { Form } from "react-bootstrap";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import moment from 'moment';
 import { Steps, Button } from 'antd';
+import { useParams } from "react-router-dom";
 
 const stateFlow = {
   'OS':[0,'주문 등록'],
@@ -18,7 +19,11 @@ const stateFlow = {
   'DE':[4,'배달 완료']
 };
 
-const stateFlowArray = ['OS','CS','CE','DS','DE'];
+const stateWholeIdx = 0;
+
+const stateCheckArrays = [['OS','CS','CE','DS','DE'],
+                          ['OS','CS','CE','DS'],
+                          ['DE']];
 
 const items = Object.entries(stateFlow).map((state,i)=>{
   return {
@@ -27,6 +32,8 @@ const items = Object.entries(stateFlow).map((state,i)=>{
 );
 
 const Working = () => {
+  let { stateType } = useParams();
+  const stateCheckArray = stateCheckArrays[useParams().stateType];
   const [orders,setOrders] = useState();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -39,7 +46,9 @@ const Working = () => {
       backEndUrl+'/order'
     )
     .then((res)=>{
-      setOrders(res.data);
+      setOrders(res.data.filter((order)=>
+        stateCheckArray.includes(order.state)
+      ));
     }).catch((error)=>{
       console.log(error)
       setError(error);
@@ -49,10 +58,10 @@ const Working = () => {
 
   useEffect(()=>{  
     fetchOrders();
-  },[]);
+  },[stateType]);
 
   const handleChange = async (id, val) => {
-    const value = stateFlowArray[val];
+    const value = stateCheckArrays[stateWholeIdx][val];
     const findIndex = orders.findIndex(element => element.orderNum === Number(id));
     const order = orders[findIndex];
     Swal.fire({
@@ -67,8 +76,20 @@ const Working = () => {
         let deliveredTime = null;
         switch(value){
           case 'CS':
-            for(let foodCount of order.foodCounts){
-              if(foodCount.food.stock - foodCount.count < 0){
+            let fcs = {}
+            for(let orderDinner of order.orderDinners){
+              for(let foodCount of orderDinner.foodCounts){
+                if(!fcs[foodCount.foodName]){
+                  fcs[foodCount.foodName] = {
+                    stock : foodCount.food.stock,
+                    count : 0
+                  }
+                }
+                fcs[foodCount.foodName].count += foodCount.count;
+              }
+            }
+            for(let fc of Object.entries(fcs)){
+              if(fc[1].stock - fc[1].count < 0){
                 const res = await Swal.fire({
                   title: '재고가 부족합니다.',
                   text : '요리를 시작하겠습니까?',
@@ -84,14 +105,16 @@ const Working = () => {
             break;
           case 'CE':
             // 요리 완료시 재고 감소
-            order.foodCounts.map((foodCount)=>{
-              axios.put(
-                backEndUrl+'/food/'+foodCount.food.foodNum,{
-                  "stock": foodCount.food.stock - foodCount.count,
-                  "price" : foodCount.food.price
-                }
-              )
-            })
+            order.orderDinners.map(async orderDinner=>
+              await orderDinner.foodCounts.map((foodCount)=>{
+                axios.put(
+                  backEndUrl+'/food/'+foodCount.food.foodNum,{
+                    "stock": foodCount.food.stock - foodCount.count,
+                    "price" : foodCount.food.price
+                  }
+                )
+              })
+            )
             break;
           case 'DE':
             deliveredTime = new Date();
@@ -112,7 +135,6 @@ const Working = () => {
         })
         fetchOrders()
       } else {
-        console.log(value);
         Swal.fire({
           title: '상태 변경이 취소되었습니다.',
           confirmButtonText: '확인',
@@ -126,7 +148,7 @@ const Working = () => {
   if (!orders) return null;
 
   return(
-    <ContentBlock>
+    <ContentBlock margin='0 0 50px 0'>
       <Row xs={4} md={3} className="g-4">
         {orders.map(order => {
           const stateIdx = stateFlow[order.state][0]+1;
@@ -137,13 +159,18 @@ const Working = () => {
                 border_bottom='1px solid #adb5bd'>{order.orderNum}</ContentBlock>
                 <Card.Body>
                   <ContentBlock height='235px' overflow='auto'>
-                  {order.dinners.map((dinner)=>
-                    <Card.Title key={dinner.dinnerNum} className="mb-4 fw-6">{dinner.name}</Card.Title>
-                  )}
-                  {order.foodCounts.map((foodCount)=>
-                    <Card.Text key={foodCount.foodOrderCountNum}>
-                      {foodCount.food.name} {foodCount.count}개 {(foodCount.food.price*foodCount.count).toLocaleString()}원
-                    </Card.Text>
+                  {order.orderDinners.map((orderDinner)=>
+                    <div key={orderDinner.dinner.dinnerNum}>
+                      <Card.Title className="mb-4 fw-6">{orderDinner.dinner.name}</Card.Title>
+                      {orderDinner.foodCounts.map((foodCount,i)=>
+                        <Card.Text key={orderDinner.dinner.dinnerNum + i}>
+                          {foodCount.foodName} {foodCount.count}개 {(foodCount.price*foodCount.count).toLocaleString()}원
+                        </Card.Text>
+                      )}
+                      <Card.Text>
+                        스타일 : {orderDinner.style.name} / {orderDinner.style.price.toLocaleString()}원
+                      </Card.Text>
+                    </div>
                   )}
                   </ContentBlock>
                   <hr></hr>
@@ -162,7 +189,7 @@ const Working = () => {
                   {order.state === 'DE' ? 
                   <Card.Text>
                     배달 완료 시간 : {moment(order.deliveredTime).format('MM-DD HH:mm')}
-                  </Card.Text> : ''}                  
+                  </Card.Text> : ''}         
                   <Form.Group className="mb-3" controlId="formBasicState">
                     <Form.Label className="mb-3">상태</Form.Label>
                     <Steps
@@ -171,16 +198,13 @@ const Working = () => {
                       current={stateIdx}
                       items={items}
                     />    
-                      {stateIdx < stateFlowArray.length && (
+                      {stateIdx < stateCheckArrays[stateWholeIdx].length && (
                         <Button type="primary" onClick={()=>handleChange(order.orderNum, stateIdx)}>
-                          {stateFlow[stateFlowArray[stateIdx]][1]}
+                          {stateFlow[stateCheckArrays[stateWholeIdx][stateIdx]][1]}
                         </Button>
                       )}
                       {stateIdx > 1 && (
-                        <Button
-                          style={{
-                            margin: '0 8px',
-                          }}
+                        <Button style={{margin: '0 8px'}}
                           onClick={() => handleChange(order.orderNum, stateIdx-2)}
                         >
                           이전
@@ -197,6 +221,10 @@ const Working = () => {
       </Row>
     </ContentBlock>
   );
+}
+
+Working.defaultProps = {
+  checkState: ''
 }
 
 export default Working;

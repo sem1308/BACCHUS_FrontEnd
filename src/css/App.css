@@ -51,6 +51,15 @@ svg {
   background: none;
 }
 
+.horizon{
+  border-top: 1px solid rgba(238, 228, 228, 1);
+}
+
+
+.ant-steps-item-icon {
+  line-height: 20px !important; 
+}
+
 .link {
   text-decoration: none;
   display : flex;

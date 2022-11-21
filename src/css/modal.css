@@ -26,6 +26,13 @@
   overflow: hidden;
 }
 
+.modal>section.audio {
+  max-width: 800px;
+  border:1px solid #8B4513!important; 
+  border-radius: 3% !important; 
+  box-shadow:0 0 10px 3px rgba(158, 125, 90,0.7)!important;
+}
+
 .modal>section>header {
   position: relative;
   padding: 10px 0 10px 16px;

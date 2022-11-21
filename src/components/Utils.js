@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 
 export const Span = styled.span`
   font-size : ${props => props.fs || '16px'};
+  border : ${props => props.border || 'none'};
+  border-radius : ${props => props.border_radius || '0'};
+  box-shadow : ${props => props.box_shadow || 'none'};
 `;
 
 /* 홈 */
@@ -46,14 +49,22 @@ export const ContentBlock = styled.div`
   align-items : ${props => props.align_items || 'center'};
   text-align : ${props => props.text_align || 'start'};
   justify-items : ${props => props.justify_items || 'center'};
-  justify_content : ${props => props.justify_content || 'flex-start'};
+  justify-content : ${props => props.justify_content || 'flex-start'};
   font-size : ${props => props.fs || 'auto'};
   font-weight : ${props => props.fw || '400'};
   opacity : ${props => props.opacity || '1'};
   color : ${props => props.color || 'black'};
   background-color: ${props => props.bg || 'none'};
   overflow: ${props => props.overflow || 'none'};
+  border : ${props => props.border || 'none'};
   border-bottom : ${props => props.border_bottom || 'none'};
+  border-radius : ${props => props.border_radius || '0'};
+  box-shadow : ${props => props.box_shadow || 'none'};
+  bottom : ${props => props.bottom || '0px'};
+  top : ${props => props.top || '0px'};
+  right : ${props => props.right || '0px'};
+  left : ${props => props.left || '0px'};
+  overflow : ${props => props.overflow || 'none'};
 `
 
 export const DinnerBlock = styled.div`
@@ -118,7 +129,11 @@ export const ModalBlock = styled.div`
   margin: 0 auto;
   display: flex;
   height : ${props => props.height || 'auto'};
+  width : ${props => props.width || 'auto'};
   flex-direction : ${props => props.flex_direction || 'row'};
+  border : ${props => props.border || 'none'};
+  border-radius : ${props => props.border_radius || '0'};
+  box-shadow : ${props => props.box_shadow || 'none'};
   overflow: ${props => props.overflow || 'none'};
 `
 
@@ -199,8 +214,9 @@ export const CustomerHeader = styled.div`
 
 export const CustomerInput = styled.input`
     border: 0;
+    width : ${props => props.w || '220px'};
     border-bottom: 1px solid #c0c0c0;
-    margin-top: 1em;
+    margin-top: ${props => props.mt || '1em'};
     margin-bottom: 1em;
     &:hover {
         border-bottom-color: black;

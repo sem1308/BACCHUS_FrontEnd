@@ -184,7 +184,7 @@ const Working = () => {
                     주문 시간 : {moment(order.orderTime).format('MM-DD HH:mm')}
                   </Card.Text>
                   <Card.Text>
-                    배달 요청 시간 : {moment(order.wantedDeliveryTime).format('MM-DD HH:mm')}
+                    배달 요청 시간 : {moment(order.wantedDeliveredTime).format('MM-DD HH:mm')}
                   </Card.Text>
                   {order.state === 'DE' ? 
                   <Card.Text>

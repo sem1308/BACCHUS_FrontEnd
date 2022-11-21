@@ -25,7 +25,7 @@ const DetailTextBlock = styled.div`
 
 const initTime = new Date().getTime() + 1.8e+6
 
-const CFDN = 2; // Champagne Festival Dinner Num
+const CFDN = 1; // Champagne Festival Dinner Num
 
 const initOrderInfo = {
   "styleCode": 'SIMPLE',
@@ -295,7 +295,7 @@ function DinnerDetail({ dinnerNum }) {
             </ContentBlock>
           </ContentBlock>
           <DinnerFoods foodCounts={foodCounts} handleFoodCountChange={handleFoodCountChange} />            
-          <ButtonBlock width='76%'>
+          <ButtonBlock width='100%'>
             <Btn margin='30px 5px' radius='10%' bg_color='rgba(139,69,19,0.7)' bg_color_hover='rgba(139,69,19,1)' onClick={() => openModal()}>주문하기</Btn>
           </ButtonBlock>
         </ContentBlock>

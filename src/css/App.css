@@ -70,6 +70,10 @@ svg {
   color : #703521;
 }
 
+.css-ja5taz-MuiTooltip-tooltip{
+  max-width: 400px !important;
+}
+
 .link:hover{
   color : #481f01;
 }
@@ -86,6 +90,10 @@ li {
 a {
   text-decoration: none;
   cursor: pointer;
+}
+
+pre{
+  font-family: var(--bs-body-font-family) !important;
 }
 
 button{

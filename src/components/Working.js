@@ -12,20 +12,23 @@ import { Steps, Button } from 'antd';
 import { useParams } from "react-router-dom";
 
 const stateFlow = {
-  'OS':[0,'주문 등록'],
-  'CS':[1,'요리 시작'],
-  'CE':[2,'요리 완료'],
-  'DS':[3,'배달 시작'],
-  'DE':[4,'배달 완료']
+  'OC':[0,'주문 취소'],
+  'OS':[1,'주문 등록'],
+  'CS':[2,'요리 시작'],
+  'CE':[3,'요리 완료'],
+  'DS':[4,'배달 시작'],
+  'DE':[5,'배달 완료']
 };
 
 const stateWholeIdx = 0;
 
-const stateCheckArrays = [['OS','CS','CE','DS','DE'],
+const stateCheckArrays = [['OC','OS','CS','CE','DS','DE'],
                           ['OS','CS','CE','DS'],
+                          ['OC'],
                           ['DE']];
 
 const items = Object.entries(stateFlow).map((state,i)=>{
+  if(i===0) return;
   return {
     title: state[1][1]
   }}
@@ -64,6 +67,7 @@ const Working = () => {
     const value = stateCheckArrays[stateWholeIdx][val];
     const findIndex = orders.findIndex(element => element.orderNum === Number(id));
     const order = orders[findIndex];
+    console.log(order)
     Swal.fire({
       title: '주문 상태를 변경하겠습니까?',
       text : "상태는 변경하면 돌이킬 수 없습니다",
@@ -110,7 +114,7 @@ const Working = () => {
                 axios.put(
                   backEndUrl+'/food/'+foodCount.food.foodNum,{
                     "stock": foodCount.food.stock - foodCount.count,
-                    "price" : foodCount.food.price
+                    "price" : foodCount.food.price,
                   }
                 )
               })
@@ -125,7 +129,9 @@ const Working = () => {
         await axios.put(
           backEndUrl+'/order/'+Number(id),{
             state : value,
-            deliveredTime : deliveredTime
+            deliveredTime : deliveredTime,
+            customerNum : order.customerNum,
+            totalPrice : order.totalPrice,
           }
         )
         Swal.fire({
@@ -151,9 +157,9 @@ const Working = () => {
     <ContentBlock margin='0 0 50px 0'>
       <Row xs={4} md={3} className="g-4">
         {orders.map(order => {
-          const stateIdx = stateFlow[order.state][0]+1;
+          const stateIdx = stateFlow[order.state][0];
           return (
-          <Col key={order.orderNum} style={order.state === 'DE' ? { opacity:0.5} : { opacity:1}}>
+          <Col key={order.orderNum} style={order.state === 'DE' || order.state === 'OC' ? { opacity:0.5} : { opacity:1}}>
               <Card>
                 <ContentBlock bg='rgba(161, 103, 56,1)' fw='600' color='white' padding='5px' fs='26px' text_align='center' 
                 border_bottom='1px solid #adb5bd'>{order.orderNum}</ContentBlock>
@@ -196,18 +202,21 @@ const Working = () => {
                       size="small"
                       direction="vertical"
                       current={stateIdx}
-                      items={items}
+                      status={stateIdx !== 0 ? "process" :"error"}
+                      items={stateIdx !== 0 ? items : [{
+                        title: '주문 취소'
+                      }]}
                     />    
-                      {stateIdx < stateCheckArrays[stateWholeIdx].length && (
-                        <Button type="primary" onClick={()=>handleChange(order.orderNum, stateIdx)}>
-                          {stateFlow[stateCheckArrays[stateWholeIdx][stateIdx]][1]}
+                      {stateIdx < stateCheckArrays[stateWholeIdx].length-1 && stateIdx !== 0 && (
+                        <Button type="primary" onClick={()=>handleChange(order.orderNum, stateIdx+1)}>
+                          {stateFlow[stateCheckArrays[stateWholeIdx][stateIdx+1]][1]}
                         </Button>
                       )}
-                      {stateIdx > 1 && (
-                        <Button style={{margin: '0 8px'}}
-                          onClick={() => handleChange(order.orderNum, stateIdx-2)}
+                      {(stateIdx !== 0) && (stateIdx !== stateCheckArrays[stateWholeIdx].length-1) && (
+                        <Button style={{margin: '0 8px', color:'red', borderColor:'red'}}
+                          onClick={() => handleChange(order.orderNum, 0)}
                         >
-                          이전
+                          주문 취소
                         </Button>
                       )}
                   </Form.Group>

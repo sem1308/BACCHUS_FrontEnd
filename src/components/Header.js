@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { parseToken } from './Utils';
 
 const HeaderBlock = styled.header`
     position: fixed;
@@ -12,6 +15,7 @@ const HeaderBlock = styled.header`
     height: 102px;
     background: #fff;
     border-bottom: 1px solid #dbccbe;
+    box-shadow : 0 0 3px 1px #dbccbe;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 `;
@@ -102,6 +106,7 @@ function Header({ type }) {
                             {
                                 cookies.token === undefined ?
                                     <div>
+                                        {console.log('정상')}
                                         <Link to={"/login/" + type}>
                                             <UserButton>로그인</UserButton>
                                         </Link>
@@ -111,16 +116,21 @@ function Header({ type }) {
                                     </div>
                                     :
                                     <div>
+                                        {console.log(cookies)}
                                         {
                                             type === '' ?
                                                 <Link to={`/ordered_list`}>
                                                     <UserButton>주문내역 조회</UserButton>
                                                 </Link>
-                                                :
-                                                ''
+                                                : parseToken(cookies.token).roles[1] === 'ADMIN' ? 
+                                                <Link to={`/manage/employee/0`}>
+                                                    <UserButton>직원 관리</UserButton>
+                                                </Link>
+                                                : ''
                                         }
                                         <UserButton onClick={() => {
                                             removeCookie('token', { path: '/' });  // 로그인 했을 때 등록했던 쿠키 해제
+                                            removeCookie('token', { path: '/manage/employee' });
                                             alert('로그아웃 되었습니다.');
                                         }}>로그아웃</UserButton>
                                     </div>

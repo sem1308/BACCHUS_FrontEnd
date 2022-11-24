@@ -4,12 +4,19 @@ import { ContentBlock } from '../Utils';
 import { LinkBlock } from '../Utils';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import Modal from '../Modal';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const Audio = () => {
+  const navigate = useNavigate();
+  const [cookies, , ] = useCookies(['token']);
 
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
-    setModalOpen(true);
+    if(cookies.token===undefined) 
+      navigate('/login');
+    else
+      setModalOpen(true);
   };
 
   const closeModal = () => {

@@ -1,11 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Form } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import { DatePicker } from 'antd';
-import moment from 'moment';
-import { ContentBlock, ModalBlock, ButtonBlock, Span, Pre } from './Utils';
-import { AddrForm, CardForm } from "./InfoForm";
+import { ContentBlock, ModalBlock,  Pre } from './Utils';
 
 const DummyIframe = styled.iframe`
   display : none;

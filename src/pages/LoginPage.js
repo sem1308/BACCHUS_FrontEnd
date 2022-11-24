@@ -10,7 +10,7 @@ import Header from '../components/Header';
 function LoginPage({ type }) {
     const [Id, setId] = useState("");
     const [Password, setPassword] = useState("");
-    const [cookies, setCookie] = useCookies(['token']);
+    const [, setCookie] = useCookies(['token']);
     const navigate = useNavigate();
 
     const onIdHandler = (event) => {
@@ -39,20 +39,20 @@ function LoginPage({ type }) {
                 if (window.confirm("주문 내역을 보시겠습니까?")) {
                     navigate(`/ordered_list`);
                 } else {
-                    navigate('/dinner');
+                    navigate('/');
                 }
             } else {
                 navigate('/employee');
             }
         } catch (e) {
-            alert('없는 정보입니다.');
-            // console.log(e);
+            alert(e.response.data.message);
+            console.log(e);
         }
     }
 
     return (
         <CustomerDiv>
-            <Header type={type}></Header>
+            <Header type={type === 'customer' ? '' : 'employee'}></Header>
             <CustomerForm onSubmit={onSubmitHandler}>
                 <CustomerHeader>
                     <h1 style={{

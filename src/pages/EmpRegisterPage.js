@@ -1,9 +1,8 @@
 import { backEndUrl } from '../configs';
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from "react-cookie";
 import React, { useState } from 'react';
 import axios from 'axios';
-import { CustomerDiv, CustomerForm, CustomerLink, CustomerHeader, CustomerInput, CustomerButton } from '../components/Utils';
+import { CustomerDiv, CustomerForm, CustomerHeader, CustomerInput, CustomerButton } from '../components/Utils';
 import styled from 'styled-components';
 import Header from '../components/Header';
 import { Form } from 'react-bootstrap';
@@ -16,7 +15,7 @@ function EmpRegisterPage() {
     const [Name, setName] = useState("");
     const [Id, setId] = useState("");
     const [Password, setPassword] = useState("");
-    const [Occupation, setOccupation] = useState("");
+    const [Occupation, setOccupation] = useState("CK");
     const [ConfirmPassword, setConfirmPassword] = useState("");
     const navigate = useNavigate();
 
@@ -55,9 +54,8 @@ function EmpRegisterPage() {
 
     const signupCustomer = async (dataToSubmit) => {
         try {
-            const response = await axios.post(backEndUrl + '/employee', dataToSubmit)
-            console.log(response);
-            alert('회원가입 되었습니다.');
+            await axios.post(backEndUrl + '/employee', dataToSubmit)
+            alert('회원가입 요청이 완료되었습니다.');
             navigate(`/login/employee`);
         } catch (e) {
             alert(e.response.data.message);

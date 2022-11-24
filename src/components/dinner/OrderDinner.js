@@ -34,7 +34,7 @@ const initOrderInfo = {
   "cardNum": ['', '', '', '']
 }  
 
-function DinnerDetail({ dinnerNum }) {
+function OrderDinner({ dinnerNum }) {
   const [dinner, setDinner] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -108,7 +108,7 @@ function DinnerDetail({ dinnerNum }) {
       await axios.post(
         backEndUrl + '/order', {
         orderDinnerDTOs: [{
-          dinner_num : dinnerNum,
+          dinnerNum : dinnerNum,
           styleCode: orderInfo.styleCode,
           insertOrderFoodCountDTOs : fc
         }],
@@ -309,4 +309,4 @@ function DinnerDetail({ dinnerNum }) {
   )
 }
 
-export default DinnerDetail;
+export default OrderDinner;

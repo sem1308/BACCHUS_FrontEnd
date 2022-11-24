@@ -168,7 +168,7 @@ function DinnerList({IsEmployee}) {
   if (!dinners) return null;
   // 음식 내용 : foodNum, name, price, type
   return (
-    <div>
+    <ContentBlock margin='0 0 50px 0'>
       <Row xs={4} md={3} className="g-4">
         {dinners.map(dinner => {
           const state = dinner.state;
@@ -214,7 +214,7 @@ function DinnerList({IsEmployee}) {
           </Modal>
         </> : ''
       }
-    </div>
+    </ContentBlock>
   );
 }
 

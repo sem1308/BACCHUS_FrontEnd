@@ -2,6 +2,8 @@ import { css } from 'styled-components';
 import styled from 'styled-components';
 import { Link, useParams } from 'react-router-dom';
 
+const nav_color = 'rgba(122, 76, 29,1)'
+
 const NavBarBlock = styled.nav`
     display: block;
     position: relative;
@@ -9,8 +11,8 @@ const NavBarBlock = styled.nav`
     margin: 0 auto;
     margin-bottom: 30px;
     text-align: center;
-    -webkit-box-shadow: inset 0 -1px 0 #decdb9;
-    box-shadow: inset 0 -1px 0 #decdb9;
+    -webkit-box-shadow: inset 0 -1px 0 ${nav_color};
+    box-shadow: inset 0 -1px 0 ${nav_color};
 `;
 
 const NavBarListBox = styled.ul`
@@ -22,10 +24,9 @@ const NavBarListBox = styled.ul`
 
 const NavBarContent = styled.li`
     float: left;
-    border: 1px solid #decdb9;
-    border-left:none;
+    border-left:2px solid #fff;
     &:first-child{  
-        border-left:1px solid #decdb9;
+        border-left:none;
     }
 `;
 
@@ -33,25 +34,30 @@ const NavBarContentLink = styled.span`
     display: block;
     width: 130px;
     height: 50px;
-    color: #4f382a;
+    color: white;
     font-size: 15px;
     line-height: 48px;
     text-align: center;
+    background : ${nav_color};
+    border: 1px solid ${nav_color};
+    border-left:none;
+    border-radius: 15px 15px 0 0 / 15px 15px 0 0;
     
     ${(props) =>
         props.active ?
             css`
           color: #8B4513;
           font-weight: bold;
-          box-shadow : 0 2px 0px 0 #fff;
-          border : 1px solid #A0522D;
-          border-bottom-color: #fff;
+          border: 1px solid ${nav_color};
+          border-radius: 15px 15px 0 0 / 15px 15px 0 0;
+          box-shadow : 0 2px 0px 0px #fff;
+          border-bottom:none;
+          background : white;
         ` :
             css`
-        &:hover{  
-            color : #8B4513;     
-            font-weight: bold;
-            box-shadow : 0 0 3px 0 #8B4513;
+        &:hover{       
+            font-size: 16px;
+            line-height: 49px;
         }`
     }
 `;

@@ -21,7 +21,7 @@ const OLP = styled.div`
     align-items: center;
     width: 100%;
     height: 100vh;
-    padding : 100px 400px;
+    padding : 100px 100px;
 `;
 
 const OLPHeader = styled.h1`
@@ -32,6 +32,7 @@ const OLPHeader = styled.h1`
 
 const OLPForm = styled.div`
     margin-top:20px;
+    width: 1000px;
     height: 45em;
     overflow:auto;
     overflow-x: hidden
@@ -129,26 +130,34 @@ const OrderedListPage = () => {
     const navigate = useNavigate();
     const customerNum = parseToken(cookies.token).num;
     // const [hover, setHover] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
     const [modalVisibleId, setModalVisibleId] = useState("")
+
+    const navigation = useNavigate();
+
+    const checkLogin = () => {
+        return cookies.token === undefined;
+      }
 
     // 재주문 버튼 클릭 시 이전 주문 정보 POST
     // 버튼 id를 주문 번호로 지정
     const submitHandler = (e) => {
         const registOrder = async () => {
             const index = user.orders.findIndex(element => element.orderNum === Number(e.target.id));
-
             await axios.post(
                 backEndUrl + '/order', {
-                foodCountDTOs: user.orders[index].foodCounts.map(fc => ({
-                    foodNum: fc.food.foodNum,
-                    count: fc.count
+                orderDinnerDTOs: user.orders[index].orderDinners.map(orderDinner=>({
+                    dinnerNum : orderDinner.dinner.dinnerNum,
+                    insertOrderFoodCountDTOs : orderDinner.foodCounts.map((foodCount)=>({
+                        "count": foodCount.count,
+                        "foodName": foodCount.food.name,
+                        "foodNum": foodCount.food.foodNum,
+                        "price": foodCount.food.price
+                    })),
+                    styleCode : orderDinner.style.styleCode,
                 })),
                 insertOrderDTO: {
-                    "dinnerNum": [user.orders[index].dinners[0].dinnerNum],
                     "customerNum": user.customerNum,
                     "totalPrice": user.orders[index].totalPrice,
-                    "styleCode": user.orders[index].style.styleCode,
                     "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
                     "address": user.address,
                     "cardNum": user.cardNum
@@ -201,15 +210,17 @@ const OrderedListPage = () => {
         setLoading(false);
     };
 
-    const openModal = () => { setModalOpen(true) };
-    const closeModal = () => { setModalOpen(false) };
     const onModalHandler = (id) => {
         setModalVisibleId(id)
     }
 
     useEffect(() => {
-        fetchCustomers();
-    }, []);
+        if(checkLogin()){
+            navigation('/login');
+        }else{
+            fetchCustomers();
+        }
+    },[]);
 
     // 주문내역 출력
     // console.log(orders);
@@ -231,7 +242,8 @@ const OrderedListPage = () => {
                             <OLPTop>
                                 <OLPTopLeft>                            
                                     <OLPTopLeftState>
-                                        <pre>{
+                                        <pre style={{color: order.state === 'OC' ? 'red': 'black',
+                                                    fontWeight : order.state === 'DE' ? 600 : 400}}>{
                                             order.state === 'DE' ?
                                                 '배달완료 · '
                                                 : order.state === 'DS' ?
@@ -240,7 +252,8 @@ const OrderedListPage = () => {
                                                         '조리완료'
                                                         : order.state === 'CS' ?
                                                             '조리시작'
-                                                            : '주문확인중'
+                                                            : order.state === 'OC' ? '주문 취소' 
+                                                                : '주문확인중'
                                         }</pre>
                                     </OLPTopLeftState>
                                     <OLPTopLeftTime>
@@ -266,7 +279,6 @@ const OrderedListPage = () => {
                                     marginRight: '1em',
                                 }} />
                                 {order.orderDinners.map(orderDinner=>{
-                                    console.log(orderDinner)
                                 return(<OLPMiddleTxt key={orderDinner.dinner.dinnerNum}>
                                     <OLPMIddleTxtMain>{orderDinner.dinner.name}</OLPMIddleTxtMain>
                                     <OLPMiddleTxtExtra>{orderDinner.dinner.extraContent}</OLPMiddleTxtExtra>

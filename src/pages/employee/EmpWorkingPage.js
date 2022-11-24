@@ -11,6 +11,10 @@ function EmpWorkingPage () {
         },
         {
             'name':'배달 완료',
+            'to' : '/working/employee/3'
+        },
+        {
+            'name':'주문 취소',
             'to' : '/working/employee/2'
         },        
         {

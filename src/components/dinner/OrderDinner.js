@@ -46,7 +46,7 @@ function OrderDinner({ dinnerNum }) {
   const [validated, setValidated] = useState(false);
   const [customer, setCustomer] = useState(false);
   const navigation = useNavigate();
-  const [cookies, ,] = useCookies(['token']);
+  const [cookies, ,] = useCookies(['cusToken']);
 
   const openModal = () => {
     setModalOpen(true);
@@ -113,7 +113,8 @@ function OrderDinner({ dinnerNum }) {
           insertOrderFoodCountDTOs : fc
         }],
         insertOrderDTO: {
-          "customerNum": customer.num,
+          "customerNum" : customer.num,
+          "customerName": customer.name,
           "totalPrice": totalPrice,
           "wantedDeliveredTime": orderInfo.wantedDeliveredTime,
           "address": orderInfo.address.join(','),
@@ -155,7 +156,7 @@ function OrderDinner({ dinnerNum }) {
   };
 
   const checkLogin = () => {
-    return cookies.token === undefined;
+    return cookies.cusToken === undefined;
   }
 
   useEffect(() => {
@@ -170,7 +171,7 @@ function OrderDinner({ dinnerNum }) {
           setFoodCounts([]);
           // loading 상태를 true 로 바꿉니다.
           setLoading(true);
-          const cust = await parseToken(cookies.token);
+          const cust = await parseToken(cookies.cusToken);
           setCustomer(cust);
           const style = await Number(dinnerNum) !== CFDN ? 'SIMPLE' : 'GRAND';
           setOrderInfo(order => ({...order, styleCode : style}))

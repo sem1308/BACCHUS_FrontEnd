@@ -27,10 +27,10 @@ function App() {
 
       <Route path="/register/employee" element={<EmpRegisterPage/>} />
       <Route path="/login/employee" element={<LoginPage type='employee' />} />
-      <Route path="/employee" element={<MiddleWare auth='EMPLE' isLogin={true} type='employee' component={<EmpHomePage/>}/>} />
-      <Route path="/working/employee/:stateType" element={<MiddleWare auth='EMPLE' isLogin={true} type='employee' component={<EmpWorkingPage />}/>} />
-      <Route path="/food/employee" element={<MiddleWare auth='EMPLE' isLogin={true} type='employee' component={<EmpManagePage which='food' />}/>} />
-      <Route path="/dinner/employee" element={<MiddleWare auth='EMPLE' isLogin={true} type='employee' component={<EmpManagePage which='dinner' />}/>} />
+      <Route path="/employee" element={<MiddleWare auth='EMPLO' isLogin={true} type='employee' component={<EmpHomePage/>}/>} />
+      <Route path="/working/employee/:stateType" element={<MiddleWare auth='EMPLO' isLogin={true} type='employee' component={<EmpWorkingPage />}/>} />
+      <Route path="/food/employee" element={<MiddleWare auth='EMPLO' isLogin={true} type='employee' component={<EmpManagePage which='food' />}/>} />
+      <Route path="/dinner/employee" element={<MiddleWare auth='EMPLO' isLogin={true} type='employee' component={<EmpManagePage which='dinner' />}/>} />
     </Routes>
   );
 }

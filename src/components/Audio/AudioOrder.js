@@ -39,7 +39,7 @@ const AudioOrder = ({dinner, setModalOpen}) => {
   const [orderInfo, setOrderInfo] = useState(initOrderInfo);
   const [totalPrice, setTotalPrice] = useState(0);
   const [customer, setCustomer] = useState(false);
-  const [cookies, ,] = useCookies(['token']);
+  const [cookies, ,] = useCookies(['cusToken']);
 
   useEffect(() => {
     const fetch = async()=> {
@@ -58,7 +58,7 @@ const AudioOrder = ({dinner, setModalOpen}) => {
         setStyleToInfo(temp_Styles);
       });
 
-      const cust = await parseToken(cookies.token);
+      const cust = await parseToken(cookies.cusToken);
       setCustomer(cust);
       const style = await Number(dinner.dinnerNum) !== CFDN ? 'SIMPLE' : 'GRAND';
       setOrderInfo(order => ({...order, styleCode : style}))
@@ -126,6 +126,7 @@ const AudioOrder = ({dinner, setModalOpen}) => {
         }],
         insertOrderDTO: {
           "customerNum": customer.num,
+          "customerName": customer.name,
           "totalPrice": totalPrice,
           "wantedDeliveredTime": orderInfo.wantedDeliveredTime,
           "address": orderInfo.address.join(','),

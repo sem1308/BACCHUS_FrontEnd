@@ -6,6 +6,12 @@ import { useParams } from 'react-router-dom';
 import { backEndUrl } from '../configs';
 import { Btn, ContentBlock} from './Utils';
 
+const occupationToWord = {
+  'CK' : '요리사',
+  'DM' : '배달원',
+  'RM' : '매니저' 
+}
+
 function EmployeeList() {
   let { isApproved } = useParams();
   const [loading, setLoading] = useState(false);
@@ -57,10 +63,10 @@ function EmployeeList() {
               이름 : {employee.name}
             </ContentBlock>
             <ContentBlock>
-              직종 : {employee.occupation}
+              직종 : {occupationToWord[employee.occupation]}
             </ContentBlock>
             {Number(isApproved) === 0 ?
-            <Btn id={employee.employeeNum} radius='10px' onClick={onSubmitHandler}>회원등록</Btn> : ''}
+            <Btn id={employee.employeeNum} radius='10px' onClick={onSubmitHandler}>직원등록</Btn> : ''}
           </Col>
           }
         )}

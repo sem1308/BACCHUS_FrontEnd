@@ -9,11 +9,11 @@ import { useNavigate } from 'react-router-dom';
 
 const Audio = () => {
   const navigate = useNavigate();
-  const [cookies, , ] = useCookies(['token']);
+  const [cookies, , ] = useCookies(['cusToken']);
 
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {
-    if(cookies.token===undefined) 
+    if(cookies.cusToken===undefined) 
       navigate('/login');
     else
       setModalOpen(true);

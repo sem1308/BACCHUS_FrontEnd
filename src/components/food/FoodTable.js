@@ -33,7 +33,7 @@ const FoodTable = ({foods, openModal}) => {
       </thead>
       {foods.map((food,i) => {
         let isChange = false;
-        if(i!=0 && beforeType != food.type) isChange = true;
+        if(i!=0 && beforeType !== food.type) isChange = true;
         beforeType = food.type;
         return <tr className={isChange && 'horizon'} key = {food.foodNum} style={food.state==='SA' ? {opacity:1} : {opacity:0.5} }>
           <td><ImgBox><Img height='30px' src={'/imgs/foods/'+food.type+'.PNG'}/></ImgBox></td>

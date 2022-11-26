@@ -5,6 +5,8 @@ import {foodType, backEndUrl} from '../../configs';
 import {ContentBlock, ButtonBlock, Btn } from '../Utils';
 import FoodModal from './FoodModal';
 import FoodTable from './FoodTable';
+import { useCookies } from 'react-cookie';
+import { parseToken } from '../Utils';
 
 const FoodInit = {
   'name' : '',
@@ -22,6 +24,9 @@ function FoodList() {
   const [error, setError] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState('/imgs/foods/'+foodType[0]+'.PNG');
+  const [cookies, ,] = useCookies(['empToken']);
+  const roles = parseToken(cookies.empToken).roles;
+  const disabled = !roles.includes('ADMIN');
 
   const openModal = (food=null) => {
     if(food !== null){
@@ -110,9 +115,11 @@ function FoodList() {
   return (
     <ContentBlock padding='15px'>
       <FoodTable foods={foods} openModal={openModal}/>
-      <ButtonBlock><Btn radius='10%' bg_color='rgba(139,69,19,0.7)' bg_color_hover='rgba(139,69,19,1)' onClick={()=>openModal()}>음식 추가</Btn></ButtonBlock>
+      {disabled ? 
+      ''
+      :<ButtonBlock><Btn radius='10%' bg_color='rgba(139,69,19,0.7)' bg_color_hover='rgba(139,69,19,1)' onClick={()=>openModal()}>음식 추가</Btn></ButtonBlock>}
       <Modal open={modalOpen} close={closeModal} header={isExist ? "음식 수정" : "음식 추가"}>
-        <FoodModal food={food} imageSrc={imageSrc} isExist={isExist}
+        <FoodModal food={food} imageSrc={imageSrc} isExist={isExist} disabled={disabled}
                   handleChange={handleChange} submitHandler={submitHandler}/>
       </Modal>
     </ContentBlock>

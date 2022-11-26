@@ -8,6 +8,8 @@ import Modal from '../Modal';
 import { backEndUrl } from '../../configs';
 import { CardImgBox, CardTextBox, ButtonBlock, Btn, ContentBlock} from '../Utils';
 import DinnerModal from './DinnerModal';
+import { useCookies } from 'react-cookie';
+import { parseToken } from '../Utils';
 
 const DinnerInit = {
   "name": "",
@@ -16,7 +18,7 @@ const DinnerInit = {
   "state" : "SA"
 }
 
-function DinnerList({IsEmployee}) {
+function DinnerList({type}) {
   const [dinners, setDinners] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -29,6 +31,11 @@ function DinnerList({IsEmployee}) {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState('/imgs/dinner.png');
+  const [cookies, ,] = useCookies(['empToken']);
+  const roles = (type==='' || cookies.empToken === undefined) ? [] : parseToken(cookies.empToken).roles;
+  const disabled = !roles.includes('ADMIN');
+  const IsEmployee = roles.includes('EMPLE');  
+
 
   const handleFoodCountChange = (e) => {
     let value;
@@ -194,28 +201,31 @@ function DinnerList({IsEmployee}) {
                 </Card.Footer>
               </Card> 
               {
-                IsEmployee ?
-                <ButtonBlock><Btn radius='10%' onClick={()=>openModal(dinner)}>수정</Btn></ButtonBlock>
-                : ''
+                disabled ? ''
+                : <ButtonBlock><Btn radius='10%' onClick={()=>openModal(dinner)}>수정</Btn></ButtonBlock>                
               }
           </Col>
           }
         )}
       </Row>
       {
-        IsEmployee ?
-        <>
-          <ButtonBlock><Btn margin='15px 5px' radius='10%' bg_color='rgba(139,69,19,0.7)' bg_color_hover='rgba(139,69,19,1)' onClick={()=>openModal()}>디너 추가</Btn></ButtonBlock>
-          <Modal open={modalOpen} close={closeModal} header={isExist ? "디너 수정" : "디너 추가"}>
-            <DinnerModal imageSrc={imageSrc} setImageSrc={setImageSrc} dinner={dinner} submitHandler={submitHandler}
-                        foodCounts={foodCounts} setFoodCountsType={setFoodCountsType} 
-                        foods={foods} handleFoodCountChange={handleFoodCountChange} handleChange={handleChange}
-                        foodCountsType = {foodCountsType} isExist={isExist}/>            
-          </Modal>
-        </> : ''
+        disabled ? ''
+        : <>
+         <ButtonBlock><Btn margin='15px 5px' radius='10%' bg_color='rgba(139,69,19,0.7)' bg_color_hover='rgba(139,69,19,1)' onClick={()=>openModal()}>디너 추가</Btn></ButtonBlock>
+         <Modal open={modalOpen} close={closeModal} header={isExist ? "디너 수정" : "디너 추가"}>
+           <DinnerModal imageSrc={imageSrc} setImageSrc={setImageSrc} dinner={dinner} submitHandler={submitHandler}
+                       foodCounts={foodCounts} setFoodCountsType={setFoodCountsType} 
+                       foods={foods} handleFoodCountChange={handleFoodCountChange} handleChange={handleChange}
+                       foodCountsType = {foodCountsType} isExist={isExist}/>            
+         </Modal>
+       </>
       }
     </ContentBlock>
   );
+}
+
+DinnerList.defaultProps = {
+  type: ''
 }
 
 export default DinnerList;

@@ -24,7 +24,7 @@ function EmpManagePage ({which}) {
                 {which === 'food' ? 
                     <FoodList></FoodList>
                     :
-                    <DinnerList IsEmployee={true}></DinnerList>
+                    <DinnerList type='employee'></DinnerList>
                 }
             </DinnerBlock>
         </div>

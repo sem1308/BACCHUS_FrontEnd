@@ -63,10 +63,14 @@ const Working = () => {
     fetchOrders();
   },[stateType]);
 
+  const getOrder = (id) => {
+    const findIndex = orders.findIndex(element => element.orderNum === Number(id));
+    return orders[findIndex];
+  }
+
   const handleChange = async (id, val) => {
     const value = stateCheckArrays[stateWholeIdx][val];
-    const findIndex = orders.findIndex(element => element.orderNum === Number(id));
-    const order = orders[findIndex];
+    const order = getOrder(id);
     console.log(order)
     Swal.fire({
       title: '주문 상태를 변경하겠습니까?',
@@ -114,7 +118,7 @@ const Working = () => {
                 axios.put(
                   backEndUrl+'/food/'+foodCount.food.foodNum,{
                     "stock": foodCount.food.stock - foodCount.count,
-                    "price" : foodCount.food.price,
+                    "price" : foodCount.food.price
                   }
                 )
               })
@@ -130,7 +134,8 @@ const Working = () => {
           backEndUrl+'/order/'+Number(id),{
             state : value,
             deliveredTime : deliveredTime,
-            customerNum : order.customerNum,
+            customerName : order.customerName,
+            cardNum : order.cardNum,
             totalPrice : order.totalPrice,
           }
         )

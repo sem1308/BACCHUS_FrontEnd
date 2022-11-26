@@ -10,7 +10,7 @@ import Header from '../components/Header';
 function LoginPage({ type }) {
     const [Id, setId] = useState("");
     const [Password, setPassword] = useState("");
-    const [, setCookie] = useCookies(['token']);
+    const [cookies, setCookie] = useCookies(['cusToken','empToken']);
     const navigate = useNavigate();
 
     const onIdHandler = (event) => {
@@ -27,21 +27,22 @@ function LoginPage({ type }) {
             pw: Password,
         }
 
-        loginCustomer(body);
+        login(body);
     }
-    const loginCustomer = async (dataToSubmit) => {
+    const login = async (dataToSubmit) => {
         try {
             const response = await axios.post(backEndUrl + '/' + type + '/login', dataToSubmit)
             console.log(response);
             alert('로그인 되었습니다.');
-            setCookie('token', response.data.data);  // 고객 쿠키 저장
             if (type === 'customer') {
+                setCookie('cusToken', response.data.data);  // 고객 쿠키 저장
                 if (window.confirm("주문 내역을 보시겠습니까?")) {
                     navigate(`/ordered_list`);
                 } else {
                     navigate('/');
                 }
             } else {
+                setCookie('empToken', response.data.data);  // 직원 쿠키 저장
                 navigate('/employee');
             }
         } catch (e) {

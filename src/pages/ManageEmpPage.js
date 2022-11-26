@@ -10,7 +10,7 @@ function ManageEmpPage () {
             'to' : '/manage/employee/0'
         },
         {
-            'name':'전체 회원',
+            'name':'전체 직원',
             'to' : '/manage/employee/1'
         }
     ]

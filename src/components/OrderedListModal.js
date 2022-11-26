@@ -28,12 +28,13 @@ const OrderedListModal = ({order}) => {
                                 if (foodCount.count === 0) return;
                                 return (
                                     <ContentBlock width='auto' display='flex' flex_direction='row' key={Number(foodCount.food.foodNum)} className='mb-3'>
-                                        <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{foodCount.food.name}</ContentBlock>
+                                        <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{foodCount.foodName}</ContentBlock>
                                         <ContentBlock fs='16px' margin='0px 5px 0 0' width='15%'>{foodCount.count}개</ContentBlock>
-                                        <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{(foodCount.food.price * foodCount.count).toString()}원</ContentBlock>
+                                        <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{(foodCount.price * foodCount.count).toString()}원</ContentBlock>
                                     </ContentBlock>
                                 )
                             })}
+                            <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>스타일 : {orderDinner.style.styleCode}</ContentBlock>
                         </ContentBlock>
                         </div>
                     )}

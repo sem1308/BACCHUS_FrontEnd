@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { parseToken } from './Utils';
 
 const HeaderBlock = styled.header`
@@ -86,7 +84,7 @@ const UtilsText = styled.li`
 `;
 
 function Header({ type }) {
-    const [cookies, , removeCookie] = useCookies(['token']);
+    const [cookies, , removeCookie] = useCookies(['cusToken','empToken']);
 
     return (
         <HeaderBlock>
@@ -104,7 +102,8 @@ function Header({ type }) {
                     <UtilsListBox>
                         <UtilsText>
                             {
-                                cookies.token === undefined ?
+                                (type==='' && cookies.cusToken === undefined) || 
+                                (type==='employee' && cookies.empToken === undefined) ?
                                     <div>
                                         {console.log('정상')}
                                         <Link to={"/login/" + type}>
@@ -122,15 +121,19 @@ function Header({ type }) {
                                                 <Link to={`/ordered_list`}>
                                                     <UserButton>주문내역 조회</UserButton>
                                                 </Link>
-                                                : parseToken(cookies.token).roles[1] === 'ADMIN' ? 
+                                                : parseToken(cookies.empToken).roles.includes('ADMIN') ? 
                                                 <Link to={`/manage/employee/0`}>
                                                     <UserButton>직원 관리</UserButton>
                                                 </Link>
                                                 : ''
                                         }
                                         <UserButton onClick={() => {
-                                            removeCookie('token', { path: '/' });  // 로그인 했을 때 등록했던 쿠키 해제
-                                            removeCookie('token', { path: '/manage/employee' });
+                                            if(type === ''){
+                                                removeCookie('cusToken', { path: '/' });  // 로그인 했을 때 등록했던 쿠키 해제
+                                            }else{
+                                                removeCookie('empToken', { path: '/' });  // 로그인 했을 때 등록했던 쿠키 해제
+                                                removeCookie('empToken', { path: '/manage/employee' });
+                                            }                                            
                                             alert('로그아웃 되었습니다.');
                                         }}>로그아웃</UserButton>
                                     </div>

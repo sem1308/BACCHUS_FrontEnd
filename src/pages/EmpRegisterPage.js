@@ -48,11 +48,11 @@ function EmpRegisterPage() {
             }
 
             console.log(body);
-            signupCustomer(body);
+            signupEmployee(body);
         }
     }
 
-    const signupCustomer = async (dataToSubmit) => {
+    const signupEmployee = async (dataToSubmit) => {
         try {
             await axios.post(backEndUrl + '/employee', dataToSubmit)
             alert('회원가입 요청이 완료되었습니다.');

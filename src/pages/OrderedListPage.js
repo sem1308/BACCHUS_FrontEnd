@@ -126,16 +126,16 @@ const OrderedListPage = () => {
     const [orders, setOrders] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [cookies, ,] = useCookies(['token']);
+    const [cookies, ,] = useCookies(['cusToken']);
     const navigate = useNavigate();
-    const customerNum = parseToken(cookies.token).num;
+    const customerNum = parseToken(cookies.cusToken).num;
     // const [hover, setHover] = useState(false);
     const [modalVisibleId, setModalVisibleId] = useState("")
 
     const navigation = useNavigate();
 
     const checkLogin = () => {
-        return cookies.token === undefined;
+        return cookies.cusToken === undefined;
       }
 
     // 재주문 버튼 클릭 시 이전 주문 정보 POST
@@ -157,6 +157,7 @@ const OrderedListPage = () => {
                 })),
                 insertOrderDTO: {
                     "customerNum": user.customerNum,
+                    "customerName": user.name,
                     "totalPrice": user.orders[index].totalPrice,
                     "wantedDeliveredTime": user.orders[index].wantedDeliveredTime,
                     "address": user.address,

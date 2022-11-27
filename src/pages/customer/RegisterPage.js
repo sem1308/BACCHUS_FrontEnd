@@ -1,9 +1,8 @@
 import { backEndUrl } from '../../configs';
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from "react-cookie";
 import React, { useState } from 'react';
 import axios from 'axios';
-import { CustomerDiv, CustomerForm, CustomerLink, CustomerHeader, CustomerInput, CustomerButton } from '../../components/Utils';
+import { CustomerDiv, CustomerForm, CustomerHeader, CustomerInput, CustomerButton } from '../../components/Utils';
 import styled from 'styled-components';
 import Header from '../../components/Header';
 

@@ -30,8 +30,7 @@
     "scss": "^0.2.4",
     "styled-components": "^5.3.6",
     "sweetalert2": "^11.6.7",
-    "web-vitals": "^2.1.4",
-    "yarn": "^1.22.19"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -56,6 +55,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "homepage": "http://ec2-52-79-168-20.ap-northeast-2.compute.amazonaws.com:3000/"
+  }
 }

@@ -44,6 +44,7 @@ const AudioModal = ({setModalOpen}) => {
 
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: (result) => {
+      console.log("듣고 있습니다!");
       if(result.includes('메뉴')){
         setChats([
           ...chats,
@@ -82,6 +83,8 @@ const AudioModal = ({setModalOpen}) => {
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다</div>;
   if (!dinners) return null;
+
+  console.log(listening);
 
   return (
     <ModalBlock height='800px' flex_direction='column' overflow='auto'>

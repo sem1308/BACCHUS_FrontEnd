@@ -12,6 +12,8 @@ const DummyIframe = styled.iframe`
 `;
 
 const OrderDinnerModal = (props) => {
+  const patronPrice = props.isPatron ? (props.totalPrice * 0.1) : 0;
+  const totalPrice = props.isPatron ? props.totalPrice - patronPrice : props.totalPrice;
   return (
     <ModalBlock height='auto' flex_direction='column' overflow='auto'>
       <DummyIframe name="dummy"></DummyIframe>
@@ -34,8 +36,14 @@ const OrderDinnerModal = (props) => {
             <ContentBlock fs='16px' margin='0px 5px 0 0' width='15%'>{props.styleToInfo[props.orderInfo.styleCode].name}</ContentBlock>
             <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{props.styleToInfo[props.orderInfo.styleCode].price.toLocaleString()}원</ContentBlock>
           </ContentBlock>
+          {props.isPatron && 
+          <ContentBlock width='auto' display='flex' flex_direction='row' className='mb-3'>
+            <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>단골 할인</ContentBlock>
+            <ContentBlock fs='16px' margin='0px 5px 0 0' width='15%'></ContentBlock>
+            <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'> - {patronPrice.toLocaleString()}원</ContentBlock>
+          </ContentBlock>}
         </ContentBlock>
-        <Pre text_align='end' mt='30px' fw='600' fs='20px'>총 금액 : {props.totalPrice.toLocaleString()}원</Pre>
+        <Pre text_align='end' mt='30px' fw='600' fs='20px'>총 금액 : {(totalPrice).toLocaleString()}원</Pre>
         <Pre mb='20px' color='black' fw='600' fs='22px'>결제</Pre>
         <Form noValidate validated={props.validated} onSubmit={props.submitHandler} target='dummy'>
           <Form.Group className="mb-3">

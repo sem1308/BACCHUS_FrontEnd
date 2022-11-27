@@ -1,6 +1,6 @@
 import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import OrderedListPage from './pages/OrderedListPage';
+import RegisterPage from './pages/customer/RegisterPage';
+import OrderedListPage from './pages/customer/OrderedListPage';
 import './css/App.css';
 import { Route, Routes } from 'react-router-dom';
 import DinnerPage from './pages/customer/DinnerPage';
@@ -8,7 +8,7 @@ import OrderDinnerPage from './pages/customer/OrderDinnerPage';
 import EmpHomePage from './pages/employee/EmpHomePage';
 import EmpWorkingPage from './pages/employee/EmpWorkingPage';
 import EmpManagePage from './pages/employee/EmpManagePage';
-import EmpRegisterPage from './pages/EmpRegisterPage';
+import EmpRegisterPage from './pages/employee/EmpRegisterPage';
 import HomePage from './pages/customer/HomePage';
 import MiddleWare from './MiddleWare';
 import ManageEmpPage from './pages/ManageEmpPage';

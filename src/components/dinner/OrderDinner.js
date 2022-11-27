@@ -24,6 +24,7 @@ const DetailTextBlock = styled.div`
 `;
 
 const initTime = new Date().getTime() + 1.8e+6
+const monToSec = 2.628e+9
 
 const CFDN = 1; // Champagne Festival Dinner Num
 
@@ -45,6 +46,7 @@ function OrderDinner({ dinnerNum }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [validated, setValidated] = useState(false);
   const [customer, setCustomer] = useState(false);
+  const [isPatron, setIsPatron] = useState(false);
   const navigation = useNavigate();
   const [cookies, ,] = useCookies(['cusToken']);
 
@@ -231,6 +233,19 @@ function OrderDinner({ dinnerNum }) {
               address: response.data.address.split(","),
               cardNum: [0, 1, 2, 3].map((i) => response.data.cardNum.slice(i * 4, i * 4 + 4))
             }))
+            
+            // 단골 확인
+            let oneMonthPay = 0;
+            for(let order of response.data.orders){
+              if((new Date().getTime() - order.orderTime) < monToSec){
+                if(order.state !== 'OC') 
+                  oneMonthPay += order.totalPrice
+              }
+              else
+                break;
+            }
+            console.log(oneMonthPay);
+            setIsPatron(oneMonthPay >= 100000 ? true : false)
           });
         } catch (e) {
           console.log(e)
@@ -303,7 +318,7 @@ function OrderDinner({ dinnerNum }) {
       </DinnerBlock>
       <Modal open={modalOpen} close={closeModal} header="주문">
         <OrderDinnerModal foodCounts={foodCounts} handleChange={handleChange} submitHandler={submitHandler}
-          orderInfo={orderInfo} setOrderInfo={setOrderInfo} validated={validated}
+          orderInfo={orderInfo} setOrderInfo={setOrderInfo} validated={validated} isPatron={isPatron}
           dinner={dinner} totalPrice={totalPrice} initTime={initTime} styleToInfo={styleToInfo} />
       </Modal>
     </div>

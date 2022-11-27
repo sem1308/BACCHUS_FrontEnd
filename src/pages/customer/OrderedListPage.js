@@ -5,12 +5,12 @@ import axios from "axios";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import { GiMeat } from 'react-icons/gi';
 import moment from 'moment';
-import { backEndUrl } from '../configs';
-import { parseToken } from "../components/Utils";
-import Modal2 from '../components/Modal2';
-import OrderedListModal from '../components/OrderedListModal';
+import { backEndUrl } from '../../configs';
+import { parseToken } from "../../components/Utils";
+import Modal2 from '../../components/Modal2';
+import OrderedListModal from '../../components/OrderedListModal';
 import styled from 'styled-components'
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import { Col } from "react-bootstrap";
 import { Row } from "react-bootstrap";
 

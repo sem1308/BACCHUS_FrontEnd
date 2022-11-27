@@ -30,15 +30,19 @@ const OrderedListModal = ({order}) => {
                                     <ContentBlock width='auto' display='flex' flex_direction='row' key={Number(foodCount.food.foodNum)} className='mb-3'>
                                         <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{foodCount.foodName}</ContentBlock>
                                         <ContentBlock fs='16px' margin='0px 5px 0 0' width='15%'>{foodCount.count}개</ContentBlock>
-                                        <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{(foodCount.price * foodCount.count).toString()}원</ContentBlock>
+                                        <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{(foodCount.price * foodCount.count).toLocaleString()}원</ContentBlock>
                                     </ContentBlock>
                                 )
                             })}
-                            <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>스타일 : {orderDinner.style.styleCode}</ContentBlock>
+                            <ContentBlock width='auto' display='flex' flex_direction='row' className='mb-3'>
+                                <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>스타일</ContentBlock>
+                                <ContentBlock fs='16px' margin='0px 5px 0 0' width='15%'>{orderDinner.style.name}</ContentBlock>
+                                <ContentBlock fs='16px' margin='0px 5px 0 0' width='30%'>{orderDinner.style.price.toLocaleString()}원</ContentBlock>
+                            </ContentBlock>
                         </ContentBlock>
                         </div>
                     )}
-                <Pre text_align='end' mt='30px' fw='600' fs='20px'>총 금액 : {orderDetail.totalPrice.toString()}원</Pre>
+                <Pre text_align='end' mt='30px' fw='600' fs='20px'>총 금액 : {orderDetail.totalPrice.toLocaleString()}원</Pre>
             </ContentBlock>
         </ModalBlock>
     );

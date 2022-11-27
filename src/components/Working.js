@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 
 const stateFlow = {
   'OC':[0,'주문 취소'],
-  'OS':[1,'주문 등록'],
+  'OR':[1,'주문 등록'],
   'CS':[2,'요리 시작'],
   'CE':[3,'요리 완료'],
   'DS':[4,'배달 시작'],
@@ -22,8 +22,8 @@ const stateFlow = {
 
 const stateWholeIdx = 0;
 
-const stateCheckArrays = [['OC','OS','CS','CE','DS','DE'],
-                          ['OS','CS','CE','DS'],
+const stateCheckArrays = [['OC','OR','CS','CE','DS','DE'],
+                          ['OR','CS','CE','DS'],
                           ['OC'],
                           ['DE']];
 

@@ -115,7 +115,6 @@ function Header({ type }) {
                                     </div>
                                     :
                                     <div>
-                                        {console.log(cookies)}
                                         {
                                             type === '' ?
                                                 <Link to={`/ordered_list`}>
